@@ -1,8 +1,17 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { Builder, Project } from "@/data/roster";
+
+async function readJson(res: Response) {
+  const text = await res.text();
+  try {
+    return JSON.parse(text) as { ok?: boolean; error?: string; project?: Project & { id?: string }; url?: string };
+  } catch {
+    return { ok: false, error: text.slice(0, 200) || `HTTP ${res.status}` };
+  }
+}
 
 export function MeEditor({
   builder,
@@ -15,6 +24,7 @@ export function MeEditor({
 }) {
   const router = useRouter();
   const [pending, start] = useTransition();
+  const [uploading, setUploading] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
 
@@ -32,6 +42,16 @@ export function MeEditor({
   const [newUrl, setNewUrl] = useState("");
   const [newOneLiner, setNewOneLiner] = useState("");
   const [newTags, setNewTags] = useState("vibe-marketing, hiring-showcase");
+
+  useEffect(() => {
+    setName(builder?.name || "");
+    setBio(builder?.bio || "");
+    setLocation(builder?.location || "");
+    setCampus(builder?.campus || "");
+    setPrivacy(builder?.privacy === "private" ? "private" : "public");
+    setBuildRepo(builder?.buildRepo || "");
+    setProjects(builder?.projects || []);
+  }, [builder]);
 
   if (!dbReady) {
     return (
@@ -58,9 +78,9 @@ export function MeEditor({
           buildRepo: buildRepo || null,
         }),
       });
-      const data = await res.json();
-      if (!data.ok) {
-        setErr(data.error || "save failed");
+      const data = await readJson(res);
+      if (!res.ok || !data.ok) {
+        setErr(data.error || `save failed (${res.status})`);
         return;
       }
       setMsg("profile saved");
@@ -68,32 +88,39 @@ export function MeEditor({
     });
   }
 
-  function saveProject(p: Project) {
+  async function persistProject(p: Project) {
     if (!p.id) {
-      setErr("project has no id yet — run sync or add a new ship");
-      return;
+      return { ok: false, error: "project has no id yet — use Add ship, or wait for merge sync" };
     }
+    const res = await fetch("/api/projects", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: p.id,
+        name: p.name,
+        oneLiner: p.oneLiner,
+        url: p.url,
+        repo: p.repo || null,
+        tags: [...p.tags],
+        shot: p.shot || null,
+        media: p.media || [],
+        sortOrder: projects.findIndex((x) => x.id === p.id),
+      }),
+    });
+    const data = await readJson(res);
+    if (!res.ok || !data.ok) {
+      return { ok: false, error: data.error || `project save failed (${res.status})` };
+    }
+    return { ok: true as const, project: data.project };
+  }
+
+  function saveProject(p: Project) {
     start(async () => {
       setErr(null);
       setMsg(null);
-      const res = await fetch("/api/projects", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id: p.id,
-          name: p.name,
-          oneLiner: p.oneLiner,
-          url: p.url,
-          repo: p.repo || null,
-          tags: [...p.tags],
-          shot: p.shot || null,
-          media: p.media || [],
-          sortOrder: projects.findIndex((x) => x.id === p.id),
-        }),
-      });
-      const data = await res.json();
-      if (!data.ok) {
-        setErr(data.error || "project save failed");
+      const result = await persistProject(p);
+      if (!result.ok) {
+        setErr(result.error || "save failed");
         return;
       }
       setMsg(`saved ${p.name}`);
@@ -119,8 +146,8 @@ export function MeEditor({
           tags,
         }),
       });
-      const data = await res.json();
-      if (!data.ok) {
+      const data = await readJson(res);
+      if (!res.ok || !data.ok) {
         setErr(data.error || "create failed");
         return;
       }
@@ -133,22 +160,42 @@ export function MeEditor({
   }
 
   async function uploadShot(projectId: string | undefined, file: File) {
-    if (!projectId) return;
-    const form = new FormData();
-    form.set("file", file);
-    const res = await fetch("/api/upload", { method: "POST", body: form });
-    const data = await res.json();
-    if (!data.ok) {
-      setErr(data.error || "upload failed");
+    if (!projectId) {
+      setErr("this ship has no id yet — cannot attach a screenshot");
       return;
     }
-    setProjects((prev) =>
-      prev.map((p) =>
+    setUploading(true);
+    setErr(null);
+    setMsg(null);
+    try {
+      const form = new FormData();
+      form.set("file", file);
+      const res = await fetch("/api/upload", { method: "POST", body: form });
+      const data = await readJson(res);
+      if (!res.ok || !data.ok || !data.url) {
+        setErr(data.error || `upload failed (${res.status})`);
+        return;
+      }
+
+      const nextProjects = projects.map((p) =>
         p.id === projectId
-          ? { ...p, shot: data.url, media: [...(p.media || []), data.url] }
+          ? { ...p, shot: data.url!, media: [...(p.media || []), data.url!] }
           : p,
-      ),
-    );
+      );
+      setProjects(nextProjects);
+      const target = nextProjects.find((p) => p.id === projectId);
+      if (!target) return;
+
+      const saved = await persistProject(target);
+      if (!saved.ok) {
+        setErr(`uploaded, but save failed: ${saved.error}`);
+        return;
+      }
+      setMsg("screenshot uploaded and saved");
+      router.refresh();
+    } finally {
+      setUploading(false);
+    }
   }
 
   function move(i: number, dir: -1 | 1) {
@@ -163,6 +210,18 @@ export function MeEditor({
 
   return (
     <div className="mt-8 space-y-10">
+      {(msg || err) && (
+        <p
+          className={`sticky top-16 z-20 rounded-lg border px-4 py-3 font-term text-sm ${
+            err
+              ? "border-amber/40 bg-amber/10 text-amber"
+              : "border-accent/40 bg-accent-dim/15 text-accent"
+          }`}
+        >
+          {err || msg}
+        </p>
+      )}
+
       <section className="rounded-xl border border-border bg-panel/50 p-6">
         <h2 className="font-term text-xs uppercase tracking-widest text-accent">
           profile · @{login}
@@ -228,7 +287,7 @@ export function MeEditor({
           onClick={saveProfile}
           className="mt-4 rounded-md bg-accent px-4 py-2 font-term text-sm text-background disabled:opacity-50"
         >
-          save profile
+          {pending ? "saving…" : "save profile"}
         </button>
       </section>
 
@@ -238,7 +297,7 @@ export function MeEditor({
         </h2>
         <p className="text-sm text-muted">
           Merge-sourced ships lock production URL evidence. You can edit tagline, tags, media,
-          and order.
+          and order. Screenshots upload and save automatically.
         </p>
         {projects.map((p, i) => (
           <div key={p.id || p.name} className="rounded-xl border border-border bg-panel/50 p-5">
@@ -246,6 +305,7 @@ export function MeEditor({
               <p className="font-term text-xs text-muted">
                 {p.fromMerge ? "from merge · locked URL" : "manual"}
                 {p.phase ? ` · ${p.phase}` : ""}
+                {!p.id ? " · missing id" : ""}
               </p>
               <div className="flex gap-2 font-term text-xs">
                 <button type="button" onClick={() => move(i, -1)} className="text-muted hover:text-accent">
@@ -318,14 +378,18 @@ export function MeEditor({
                 />
               </label>
               <label className="block text-sm sm:col-span-2">
-                <span className="text-muted">screenshot / media</span>
+                <span className="text-muted">
+                  screenshot / media {uploading ? "(uploading…)" : ""}
+                </span>
                 <input
                   type="file"
                   accept="image/*"
+                  disabled={uploading || !p.id}
                   className="mt-1 block w-full text-sm"
                   onChange={(e) => {
                     const f = e.target.files?.[0];
                     if (f) uploadShot(p.id, f);
+                    e.target.value = "";
                   }}
                 />
                 {p.shot && (
@@ -336,11 +400,11 @@ export function MeEditor({
             </div>
             <button
               type="button"
-              disabled={pending}
-              onClick={() => saveProject(p)}
+              disabled={pending || !p.id}
+              onClick={() => saveProject(projects[i])}
               className="mt-4 rounded-md border border-border px-4 py-2 font-term text-sm text-foreground hover:border-accent hover:text-accent disabled:opacity-50"
             >
-              save ship
+              {pending ? "saving…" : "save ship"}
             </button>
           </div>
         ))}
@@ -383,12 +447,6 @@ export function MeEditor({
           </div>
         </div>
       </section>
-
-      {(msg || err) && (
-        <p className={`font-term text-sm ${err ? "text-amber" : "text-accent"}`}>
-          {err || msg}
-        </p>
-      )}
     </div>
   );
 }

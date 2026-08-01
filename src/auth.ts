@@ -34,22 +34,23 @@ const config: NextAuthConfig = {
     signIn: "/signin",
   },
   callbacks: {
-    async jwt({ token, account, profile }) {
+    async jwt({ token, user, account, profile }) {
+      const fromUser = (user as { login?: string } | undefined)?.login;
+      const fromProfile = (profile as { login?: string } | undefined)?.login;
+      const login = fromUser || fromProfile || (token.login as string | undefined);
+      if (login) {
+        token.login = login;
+      }
+      if (user?.image) token.picture = user.image;
       if (account && profile) {
-        const login =
-          (profile as { login?: string }).login ||
-          (token as { login?: string }).login;
-        if (login) {
-          token.login = login;
-          token.picture =
-            (profile as { avatar_url?: string }).avatar_url || token.picture;
-        }
+        const avatar = (profile as { avatar_url?: string }).avatar_url;
+        if (avatar) token.picture = avatar;
       }
       return token;
     },
     async session({ session, token }) {
-      if (session.user && token.login) {
-        session.user.login = String(token.login);
+      if (session.user) {
+        if (token.login) session.user.login = String(token.login);
         if (token.picture) session.user.image = String(token.picture);
       }
       return session;

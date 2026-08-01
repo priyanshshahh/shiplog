@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { auth } from "@/auth";
 import { getDb, hasDatabase } from "@/db";
 import { members, projects } from "@/db/schema";
@@ -9,7 +9,11 @@ export const runtime = "nodejs";
 async function requireOwner() {
   const session = await auth();
   const login = session?.user?.login;
-  if (!login) return { error: NextResponse.json({ ok: false, error: "signin required" }, { status: 401 }) };
+  if (!login) {
+    return {
+      error: NextResponse.json({ ok: false, error: "signin required" }, { status: 401 }),
+    };
+  }
   if (!hasDatabase()) {
     return {
       error: NextResponse.json({ ok: false, error: "DATABASE_URL required" }, { status: 503 }),
@@ -19,10 +23,30 @@ async function requireOwner() {
 }
 
 async function ensureMember(db: ReturnType<typeof getDb>, handle: string) {
-  const rows = await db.select().from(members).where(eq(members.handle, handle)).limit(1);
+  const rows = await db
+    .select()
+    .from(members)
+    .where(sql`lower(${members.handle}) = lower(${handle})`)
+    .limit(1);
   if (!rows.length) {
     await db.insert(members).values({ handle, claimedAt: new Date(), privacy: "public" });
+    return handle;
   }
+  return rows[0].handle;
+}
+
+async function findOwnedProject(
+  db: ReturnType<typeof getDb>,
+  login: string,
+  id: string,
+) {
+  return db
+    .select()
+    .from(projects)
+    .where(
+      and(eq(projects.id, id), sql`lower(${projects.handle}) = lower(${login})`),
+    )
+    .limit(1);
 }
 
 export async function POST(req: Request) {
@@ -45,12 +69,15 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "name and url required" }, { status: 400 });
   }
 
-  await ensureMember(db, login);
-  const existing = await db.select().from(projects).where(eq(projects.handle, login));
+  const handle = await ensureMember(db, login);
+  const existing = await db
+    .select()
+    .from(projects)
+    .where(sql`lower(${projects.handle}) = lower(${login})`);
   const [row] = await db
     .insert(projects)
     .values({
-      handle: login,
+      handle,
       name: body.name.trim().slice(0, 120),
       oneLiner: (body.oneLiner || "").slice(0, 400),
       url: body.url.trim().slice(0, 500),
@@ -73,7 +100,7 @@ export async function PATCH(req: Request) {
   const { login, db } = gate as { login: string; db: ReturnType<typeof getDb> };
 
   const body = (await req.json()) as {
-    id: string;
+    id?: string;
     name?: string;
     oneLiner?: string;
     url?: string;
@@ -88,11 +115,7 @@ export async function PATCH(req: Request) {
     return NextResponse.json({ ok: false, error: "id required" }, { status: 400 });
   }
 
-  const rows = await db
-    .select()
-    .from(projects)
-    .where(and(eq(projects.id, body.id), eq(projects.handle, login)))
-    .limit(1);
+  const rows = await findOwnedProject(db, login, body.id);
   if (!rows.length) {
     return NextResponse.json({ ok: false, error: "not found" }, { status: 404 });
   }
@@ -132,11 +155,7 @@ export async function DELETE(req: Request) {
     return NextResponse.json({ ok: false, error: "id required" }, { status: 400 });
   }
 
-  const rows = await db
-    .select()
-    .from(projects)
-    .where(and(eq(projects.id, id), eq(projects.handle, login)))
-    .limit(1);
+  const rows = await findOwnedProject(db, login, id);
   if (!rows.length) {
     return NextResponse.json({ ok: false, error: "not found" }, { status: 404 });
   }
