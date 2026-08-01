@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { put } from "@vercel/blob";
+import sharp from "sharp";
 import { auth } from "@/auth";
 
 export const runtime = "nodejs";
@@ -29,11 +30,22 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: false, error: "max 4.5mb" }, { status: 400 });
     }
 
-    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+    const input = Buffer.from(await file.arrayBuffer());
+    const optimized = await sharp(input)
+      .rotate()
+      .resize({ width: 1280, height: 1280, fit: "inside", withoutEnlargement: true })
+      .webp({ quality: 72 })
+      .toBuffer();
+
+    const baseName = file.name.replace(/\.[^.]+$/, "").replace(/[^a-zA-Z0-9._-]/g, "_");
     const blob = await put(
-      `shiplog/${session.user.login}/${Date.now()}-${safeName}`,
-      file,
-      { access: "public", token: process.env.BLOB_READ_WRITE_TOKEN },
+      `shiplog/${session.user.login}/${Date.now()}-${baseName}.webp`,
+      optimized,
+      {
+        access: "public",
+        contentType: "image/webp",
+        token: process.env.BLOB_READ_WRITE_TOKEN,
+      },
     );
 
     return NextResponse.json({ ok: true, url: blob.url });

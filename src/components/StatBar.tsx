@@ -16,11 +16,11 @@ export function StatBar({ stats }: { stats: Stat[] }) {
           transition={{ delay: i * 0.08 }}
           className="bg-panel px-5 py-4"
         >
-          <div className="font-term text-2xl text-accent text-glow">{s.value}</div>
+          <div className="font-term text-2xl text-accent">{s.value}</div>
           <div className="mt-1 font-term text-[11px] uppercase tracking-wide text-muted">
             {s.label}
           </div>
-          {s.hint && <div className="mt-0.5 text-[11px] text-muted/70">{s.hint}</div>}
+          {s.hint && <div className="mt-0.5 text-[11px] text-muted">{s.hint}</div>}
         </motion.div>
       ))}
     </div>

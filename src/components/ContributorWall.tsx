@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { avatarUrl } from "@/data/roster";
 import {
   contributorCount,
@@ -38,14 +39,12 @@ export function ContributorWall({ limit = 24 }: { limit?: number }) {
             className="group flex items-center gap-2 rounded-full border border-border bg-panel/50 py-1.5 pr-3 pl-1.5 transition-colors hover:border-accent-dim"
             title={`${c.contributions} contributions`}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={avatarUrl(c.handle)}
+            <Image
+              src={avatarUrl(c.handle, 28)}
               alt=""
               width={28}
               height={28}
               className="h-7 w-7 rounded-full"
-              loading="lazy"
             />
             <span className="font-term text-[11px] text-muted group-hover:text-foreground">
               @{c.handle}

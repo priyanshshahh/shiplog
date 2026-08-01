@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { type Builder } from "@/data/roster";
@@ -12,11 +13,10 @@ export function BuilderCard({ builder, index = 0 }: { builder: Builder; index?: 
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
+      initial={{ opacity: 0, y: 8 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.3, delay: Math.min(index, 6) * 0.04 }}
-      whileHover={{ y: -3 }}
+      transition={{ duration: 0.25, delay: Math.min(index, 4) * 0.03 }}
       className="group relative overflow-hidden rounded-xl border border-border bg-panel/60 transition-colors hover:border-accent-dim"
     >
       {lead.shot && (
@@ -25,20 +25,19 @@ export function BuilderCard({ builder, index = 0 }: { builder: Builder; index?: 
           alt={`${lead.name} screenshot`}
           url={lead.url}
           className="rounded-none border-0"
+          priority={index === 0}
         />
       )}
 
       <div className="relative p-5">
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={resolveAvatar(builder)}
+            <Image
+              src={resolveAvatar(builder, 36)}
               alt=""
               width={36}
               height={36}
               className="h-9 w-9 rounded-full border border-border"
-              loading="lazy"
             />
             <div>
               <Link

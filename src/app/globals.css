@@ -3,7 +3,7 @@
 :root {
   --background: #f4f6f4;
   --foreground: #0c100e;
-  --muted: #5c665f;
+  --muted: #4a534c;
   --panel: #ffffff;
   --border: #d5ddd6;
   --accent: #0f9f56;
@@ -15,7 +15,7 @@
 html.dark {
   --background: #08090a;
   --foreground: #e7ece7;
-  --muted: #8a938c;
+  --muted: #9aa39c;
   --panel: #0f1210;
   --border: #1d231e;
   --accent: #3ef08c;

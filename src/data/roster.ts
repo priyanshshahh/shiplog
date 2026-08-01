@@ -48,8 +48,9 @@ export type ActivityEvent = {
   at: string; // real ISO timestamp from `gh pr list --json mergedAt`
 };
 
-export function avatarUrl(handle: string) {
-  return `https://github.com/${handle}.png`;
+export function avatarUrl(handle: string, size = 64) {
+  const s = Math.min(460, Math.max(32, Math.round(size * 2)));
+  return `https://github.com/${handle}.png?size=${s}`;
 }
 
 export const cohortId = "summer26";

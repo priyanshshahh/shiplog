@@ -126,8 +126,8 @@ export async function getActivity(): Promise<ActivityEvent[]> {
   return seedActivity;
 }
 
-export function resolveAvatar(builder: Builder) {
-  return builder.avatarOverride || githubAvatar(builder.handle);
+export function resolveAvatar(builder: Builder, size = 64) {
+  return builder.avatarOverride || githubAvatar(builder.handle, size);
 }
 
 export { githubAvatar as avatarUrl };

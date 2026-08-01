@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { builders as seedBuilders } from "@/data/roster";
@@ -68,12 +69,13 @@ export default async function BuilderPage({
 
       <Reveal className="mt-6">
         <div className="flex flex-wrap items-center gap-4">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={resolveAvatar(builder)}
+          <Image
+            src={resolveAvatar(builder, 64)}
             alt=""
             width={64}
             height={64}
+            sizes="64px"
+            priority
             className="h-16 w-16 rounded-full border border-border"
           />
           <div>

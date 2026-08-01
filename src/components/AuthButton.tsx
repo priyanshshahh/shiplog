@@ -36,7 +36,7 @@ export function AuthButton({ enabled }: { enabled: boolean }) {
     <button
       type="button"
       onClick={() => signIn("github", { callbackUrl: "/me" })}
-      className="rounded-md px-3 py-1.5 font-term text-sm text-accent hover:bg-accent-dim/25"
+      className="rounded-md px-3 py-1.5 font-term text-sm text-foreground hover:text-accent"
     >
       sign in
     </button>

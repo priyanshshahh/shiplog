@@ -1,13 +1,17 @@
+import Image from "next/image";
+
 export function BrowserFrame({
   src,
   alt,
   url,
   className,
+  priority = false,
 }: {
   src: string;
   alt: string;
   url?: string;
   className?: string;
+  priority?: boolean;
 }) {
   return (
     <div className={`overflow-hidden rounded-t-xl border border-b-0 border-border bg-panel ${className ?? ""}`}>
@@ -23,8 +27,16 @@ export function BrowserFrame({
           </span>
         )}
       </div>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt={alt} loading="lazy" className="block w-full" />
+      <div className="relative aspect-[16/10] w-full">
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          className="object-cover object-top"
+          priority={priority}
+        />
+      </div>
     </div>
   );
 }
