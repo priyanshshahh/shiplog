@@ -13,7 +13,7 @@ export function Hero() {
         transition={{ duration: 0.6 }}
         className="font-term text-xs uppercase tracking-[0.3em] text-accent"
       >
-        cohort 67 · summer pilot 2026 · week 3
+        summer pilot 2026 · week 3
       </motion.div>
 
       <h1 className="mt-6 max-w-3xl text-5xl font-semibold leading-[1.05] tracking-tight text-foreground sm:text-7xl">

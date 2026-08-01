@@ -4,7 +4,7 @@
 
 shiplog is [@priyanshshahh](https://github.com/priyanshshahh)'s Week 3 ("Vibe marketing")
 submission to the [Hult Cohort Program](https://github.com/rogerSuperBuilderAlpha/hult-cohort-program),
-Summer Pilot 2026, Cohort 67. It's the public-facing showcase site for the cohort:
+Summer Pilot 2026 (cohort id `summer26`). It's the public-facing showcase site for the cohort:
 participant profiles, real shipped projects, and a partner-facing narrative — every
 link on it points at a merged GitHub pull request and a live production deploy.
 
@@ -55,7 +55,8 @@ and checked into `src/data/roster.ts`.
 ## Known limitations
 
 - Roster only includes builders with a verified merged PR for this project week;
-  the rest of Cohort 67 (67 enrolled total) isn't individually profiled yet.
+  the rest of the cohort (67 enrolled total, per the program's own
+  `/api/cohort/stats`) isn't individually profiled yet.
 - No self-serve claim flow or auth — by design, to ship reliably inside the review
   window rather than stand up new backend infrastructure under deadline.
 

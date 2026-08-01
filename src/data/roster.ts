@@ -1,5 +1,7 @@
-// Real Cohort 67 (Summer Pilot 2026) data, sourced from merged GitHub PRs against
-// rogerSuperBuilderAlpha/hult-cohort-program. No fabricated names, metrics, or URLs.
+// Real Summer Pilot 2026 (cohortId "summer26") data, sourced from merged GitHub PRs
+// against rogerSuperBuilderAlpha/hult-cohort-program. No fabricated names, metrics,
+// or URLs. "67" is enrolledCount (from the program's own /api/cohort/stats), not a
+// cohort number — there is no "Cohort 67" designation anywhere in the program.
 // Source of truth: submissions/*.md + PR bodies on the cohort repo.
 
 export type Project = {
@@ -34,7 +36,7 @@ export function avatarUrl(handle: string) {
 }
 
 export const cohortId = "summer26";
-export const cohortLabel = "Cohort 67";
+export const cohortLabel = "Summer Pilot 2026";
 export const enrolledCount = 67;
 
 // Real merge/open events pulled via `gh pr list --repo rogerSuperBuilderAlpha/hult-cohort-program

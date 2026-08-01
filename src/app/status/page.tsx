@@ -4,7 +4,7 @@ import { Reveal } from "@/components/Reveal";
 
 export const metadata: Metadata = {
   title: "Status — shiplog",
-  description: "Live links into this builder's earlier Cohort 67 deliverables.",
+  description: "Live links into this builder's earlier Summer Pilot 2026 deliverables.",
 };
 
 export default function StatusPage() {

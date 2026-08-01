@@ -5,7 +5,7 @@ import { Reveal } from "@/components/Reveal";
 
 export const metadata: Metadata = {
   title: "Partners — shiplog",
-  description: "Why hiring and investment partners should engage with Cohort 67.",
+  description: "Why hiring and investment partners should engage with the Summer Pilot 2026 cohort.",
 };
 
 const engagements = [

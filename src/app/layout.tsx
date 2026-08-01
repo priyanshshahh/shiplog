@@ -16,9 +16,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "shiplog — Cohort 67",
+  title: "shiplog — Summer Pilot 2026",
   description:
-    "Proof of work, not a portfolio. Live deploys, real profiles, and merged pull requests from the Hult Cohort 67 Summer Pilot 2026.",
+    "Proof of work, not a portfolio. Live deploys, real profiles, and merged pull requests from the Hult Cohort Program's Summer Pilot 2026.",
 };
 
 export default function RootLayout({

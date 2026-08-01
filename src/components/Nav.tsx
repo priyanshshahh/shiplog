@@ -30,7 +30,7 @@ export function Nav() {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <Link href="/" className="font-term text-sm tracking-tight text-foreground">
           <span className="text-accent">$</span> shiplog{" "}
-          <span className="text-muted">— cohort 67</span>
+          <span className="text-muted">— summer26</span>
           <motion.span
             className="ml-1 inline-block h-3.5 w-2 translate-y-0.5 bg-accent align-middle"
             animate={{ opacity: [1, 1, 0, 0] }}

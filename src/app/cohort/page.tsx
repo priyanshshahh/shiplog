@@ -5,7 +5,7 @@ import { Reveal } from "@/components/Reveal";
 
 export const metadata: Metadata = {
   title: "Cohort — shiplog",
-  description: "The full profiled roster of Cohort 67 builders.",
+  description: "The full profiled roster of Summer Pilot 2026 builders.",
 };
 
 export default function CohortPage() {
