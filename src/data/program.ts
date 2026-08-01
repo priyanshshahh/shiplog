@@ -1,5 +1,4 @@
-/** Official program surfaces. Importers: page.tsx, partners, LaunchBoard, ReviewCta, API routes. */
-/** User: "winner is by upvotes, and upvotes are received from review on github." */
+/** Official program surfaces. */
 
 export const program = {
   cohortId: "summer26",
@@ -16,7 +15,7 @@ export const program = {
   reviewDeadline: "Mon Aug 3, 2026 · 17:00 ET",
   mergeDeadline: "Sun Aug 2, 2026 · 17:00 ET",
   voteRule:
-    "Winner = most public Vote: up lines in written GitHub review issues. No on-site ballots.",
+    "Winners are chosen by Vote: up lines inside written GitHub review issues.",
 } as const;
 
 export type ReviewPulse = {
@@ -27,7 +26,6 @@ export type ReviewPulse = {
   hasUpvote: boolean;
 };
 
-/** Real review issues from the cohort repo. Not fabricated tallies. */
 export const reviewPulse: ReviewPulse[] = [
   {
     reviewer: "joes9987",

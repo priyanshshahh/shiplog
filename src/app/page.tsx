@@ -1,18 +1,16 @@
 import Link from "next/link";
 import { builders, cohortLabel, enrolledCount } from "@/data/roster";
-import { contributorCount, totalContributions } from "@/data/contributors";
-import { program } from "@/data/program";
 import { StatBar } from "@/components/StatBar";
 import { Reveal } from "@/components/Reveal";
 import { Hero } from "@/components/Hero";
-import { SocialPulse } from "@/components/SocialPulse";
-import { LaunchBoard } from "@/components/LaunchBoard";
+import { ActivityTicker } from "@/components/ActivityTicker";
+import { BuilderCard } from "@/components/BuilderCard";
 import { PmPanel } from "@/components/PmPanel";
 import { ContributorWall } from "@/components/ContributorWall";
-import { ReviewCta } from "@/components/ReviewCta";
 
 export default function Home() {
-  const publicCount = builders.filter((b) => b.privacy !== "private").length;
+  const publicBuilders = builders.filter((b) => b.privacy !== "private");
+  const featured = publicBuilders.slice(0, 6);
   const totalShips = builders.reduce((n, b) => n + b.projects.length, 0);
 
   return (
@@ -20,44 +18,54 @@ export default function Home() {
       <div className="mx-auto max-w-6xl px-6">
         <Hero />
       </div>
-      <SocialPulse />
+      <ActivityTicker />
       <div className="mx-auto max-w-6xl px-6">
         <section className="pb-8 pt-10">
           <StatBar
             stats={[
               { label: "enrolled", value: String(enrolledCount), hint: cohortLabel },
-              { label: "profiled", value: String(publicCount), hint: "PR-linked · verified" },
-              { label: "live deploys", value: String(totalShips), hint: "not screenshots" },
-              {
-                label: "repo commits",
-                value: String(totalContributions),
-                hint: `${contributorCount} contributors`,
-              },
+              { label: "on this roster", value: String(publicBuilders.length), hint: "verified ships" },
+              { label: "live deploys", value: String(totalShips), hint: "open and use them" },
+              { label: "reviews", value: "on GitHub", hint: "Vote: up in issues" },
             ]}
           />
         </section>
 
-        <section id="launches" className="py-16">
-          <Reveal>
-            <h2 className="font-term text-xs uppercase tracking-widest text-accent">
-              launch board
-            </h2>
-            <p className="mt-2 max-w-2xl text-muted">
-              Debut-dense feed: sort, search, micro-tags. Upvotes happen on GitHub review issues —
-              use ▲ review / Vote: up on each row. Tallies never render here.
-            </p>
+        <section id="roster" className="py-16">
+          <Reveal className="flex items-end justify-between gap-4">
+            <div>
+              <h2 className="font-term text-xs uppercase tracking-widest text-accent">
+                recent ships
+              </h2>
+              <p className="mt-2 max-w-xl text-muted">
+                Every card opens a live deploy, source, and profile. Request an intro to anyone
+                from their page or Partners.
+              </p>
+            </div>
+            <Link
+              href="/cohort"
+              className="hidden shrink-0 font-term text-sm text-accent hover:underline sm:block"
+            >
+              full roster
+            </Link>
           </Reveal>
-          <div className="mt-8">
-            <LaunchBoard builders={builders} />
+
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {featured.map((b, i) => (
+              <BuilderCard key={b.handle} builder={b} index={i} />
+            ))}
           </div>
+
+          <Link
+            href="/cohort"
+            className="mt-6 block text-center font-term text-sm text-accent hover:underline sm:hidden"
+          >
+            full roster
+          </Link>
         </section>
 
         <section className="py-10">
           <PmPanel />
-        </section>
-
-        <section className="py-10">
-          <ReviewCta />
         </section>
 
         <section className="py-16">
@@ -72,33 +80,22 @@ export default function Home() {
                   for hiring partners
                 </h2>
                 <p className="mt-3 max-w-xl text-xl leading-snug text-foreground">
-                  Every profile is a merged pull request, a production URL, and a person you can
-                  hire — not a portfolio someone meant to finish.
-                </p>
-                <p className="mt-3 text-sm text-muted">
-                  Official cohort ops:{" "}
-                  <a
-                    href={program.officialSite}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-accent hover:underline"
-                  >
-                    {program.officialSite.replace("https://", "")}
-                  </a>
+                  Browse builders, open their live apps, then request an intro to the people you
+                  want to meet.
                 </p>
               </div>
               <div className="flex flex-col gap-3 sm:items-end">
                 <Link
                   href="/partners"
-                  className="w-full rounded-lg bg-accent px-5 py-3 text-center font-term text-sm font-medium text-[#04140b] transition-transform hover:scale-[1.02] sm:w-auto"
+                  className="w-full rounded-lg bg-accent px-5 py-3 text-center font-term text-sm font-medium text-[var(--accent-ink)] sm:w-auto"
                 >
-                  request intro →
+                  request an intro
                 </Link>
                 <Link
-                  href="/rsvp"
-                  className="w-full rounded-lg border border-border px-5 py-3 text-center font-term text-sm text-muted transition-colors hover:text-foreground sm:w-auto"
+                  href="/cohort"
+                  className="w-full rounded-lg border border-border px-5 py-3 text-center font-term text-sm text-muted hover:text-foreground sm:w-auto"
                 >
-                  RSVP hiring showcase
+                  browse the roster
                 </Link>
               </div>
             </div>

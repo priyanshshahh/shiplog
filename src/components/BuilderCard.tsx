@@ -11,11 +11,11 @@ export function BuilderCard({ builder, index = 0 }: { builder: Builder; index?: 
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 14 }}
+      initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.4, delay: Math.min(index, 6) * 0.05 }}
-      whileHover={{ y: -4 }}
+      transition={{ duration: 0.3, delay: Math.min(index, 6) * 0.04 }}
+      whileHover={{ y: -3 }}
       className="group relative overflow-hidden rounded-xl border border-border bg-panel/60 transition-colors hover:border-accent-dim"
     >
       {lead.shot && (
@@ -27,80 +27,59 @@ export function BuilderCard({ builder, index = 0 }: { builder: Builder; index?: 
         />
       )}
 
-      <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-        <div className="absolute -top-24 -right-24 h-48 w-48 rounded-full bg-accent/10 blur-3xl" />
-      </div>
-
       <div className="relative p-5">
-      <div className="relative flex items-start justify-between gap-3">
-        <div className="flex items-center gap-3">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={avatarUrl(builder.handle)}
-            alt=""
-            width={36}
-            height={36}
-            className="h-9 w-9 rounded-full border border-border"
-            loading="lazy"
-          />
-          <div>
-            <Link
-              href={`/cohort/${builder.handle}`}
-              className="font-term text-sm text-foreground hover:text-accent"
-            >
-              @{builder.handle}
-            </Link>
-            {builder.isMe && (
-              <span className="ml-2 font-term text-[10px] text-accent">you</span>
-            )}
-            <p className="mt-0.5 text-sm font-medium text-foreground">{lead.name}</p>
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-center gap-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={avatarUrl(builder.handle)}
+              alt=""
+              width={36}
+              height={36}
+              className="h-9 w-9 rounded-full border border-border"
+              loading="lazy"
+            />
+            <div>
+              <Link
+                href={`/cohort/${builder.handle}`}
+                className="font-term text-sm text-foreground hover:text-accent"
+              >
+                @{builder.handle}
+              </Link>
+              <p className="mt-0.5 text-sm font-medium text-foreground">{lead.name}</p>
+            </div>
           </div>
+          <span className="font-term text-[10px] text-muted">
+            {builder.projects.length > 1 ? `${builder.projects.length} ships` : "1 ship"}
+          </span>
         </div>
-        <span className="font-term text-[10px] text-muted">
-          {builder.projects.length > 1 ? `${builder.projects.length} ships` : "1 ship"}
-        </span>
-      </div>
 
-      <p className="relative mt-3 text-[13px] leading-relaxed text-muted">
-        {lead.oneLiner}
-      </p>
+        <p className="mt-3 text-[13px] leading-relaxed text-muted">{lead.oneLiner}</p>
 
-      <div className="relative mt-4 flex flex-wrap gap-1.5">
-        <Tag>{lead.tags[0]}</Tag>
-        <Tag>{lead.tags[1]}</Tag>
-      </div>
+        <div className="mt-4 flex flex-wrap gap-1.5">
+          <Tag>{lead.tags[0]}</Tag>
+          <Tag>{lead.tags[1]}</Tag>
+        </div>
 
-      <div className="relative mt-5 flex items-center gap-4 border-t border-border pt-3 font-term text-[11px] text-muted opacity-70 transition-opacity group-hover:opacity-100">
-        <a
-          href={lead.url}
-          target="_blank"
-          rel="noreferrer"
-          className="hover:text-accent"
-          onClick={(e) => e.stopPropagation()}
-        >
-          deploy ↗
-        </a>
-        {lead.repo && (
-          <a
-            href={lead.repo}
-            target="_blank"
-            rel="noreferrer"
-            className="hover:text-accent"
-            onClick={(e) => e.stopPropagation()}
-          >
-            repo ↗
+        <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-border pt-3 font-term text-[11px] text-muted">
+          <a href={lead.url} target="_blank" rel="noreferrer" className="hover:text-accent">
+            deploy
           </a>
-        )}
-        <a
-          href={builder.prUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="hover:text-accent"
-          onClick={(e) => e.stopPropagation()}
-        >
-          merged PR ↗
-        </a>
-      </div>
+          {lead.repo && (
+            <a href={lead.repo} target="_blank" rel="noreferrer" className="hover:text-accent">
+              repo
+            </a>
+          )}
+          <Link href={`/cohort/${builder.handle}`} className="hover:text-accent">
+            profile
+          </Link>
+          <Link
+            href={`/partners?with=${encodeURIComponent(builder.handle)}`}
+            className="ml-auto text-accent hover:underline"
+          >
+            request intro
+          </Link>
+        </div>
       </div>
     </motion.div>
   );

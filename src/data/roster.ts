@@ -1,7 +1,7 @@
 // Real Summer Pilot 2026 (cohortId "summer26") data, sourced from merged GitHub PRs
 // against rogerSuperBuilderAlpha/hult-cohort-program. No fabricated names, metrics,
 // or URLs. "67" is enrolledCount (from the program's own /api/cohort/stats), not a
-// cohort number — there is no "Cohort 67" designation anywhere in the program.
+// cohort number. there is no "Cohort 67" designation anywhere in the program.
 // Source of truth: submissions/*.md + PR bodies on the cohort repo.
 
 export type Project = {
@@ -49,7 +49,7 @@ export const cohortLabel = "Summer Pilot 2026";
 export const enrolledCount = 67;
 
 // Real merge/open events pulled via `gh pr list --repo rogerSuperBuilderAlpha/hult-cohort-program
-// --base projects/summer26/phase-1-project-3 --state all --json ... mergedAt`. Sorted newest first.
+// --base projects/summer26/phase-1-project-3 --state all --json . mergedAt`. Sorted newest first.
 export const activity: ActivityEvent[] = [
   { handle: "priyanshshahh", project: "shiplog", action: "opened", prNumber: 197, url: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/197", at: "2026-08-01T07:16:31Z" },
   { handle: "Studmuffin01", project: "Lighthouse", action: "merged", prNumber: 193, url: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/193", at: "2026-07-31T22:39:14Z" },
@@ -69,7 +69,7 @@ export const builders: Builder[] = [
     handle: "priyanshshahh",
     name: "Priyansh Shah",
     isMe: true,
-    bio: "Data scientist & blockchain developer — AI, NLP, and trading systems. Stony Brook AMS.",
+    bio: "Data scientist & blockchain developer. AI, NLP, and trading systems. Stony Brook AMS.",
     location: "New York, NY",
     campus: "boston",
     prUrl: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/197",
@@ -79,16 +79,15 @@ export const builders: Builder[] = [
       {
         name: "shiplog",
         oneLiner:
-          "Official-grade vibe marketing launchpad — live ships, GitHub-native Vote: up, partner intros, and PM pulse for Summer Pilot 2026.",
+          "Cohort vibe marketing roster with live deploys, partner intros, and GitHub review links.",
         url: "https://shiplog-snowy.vercel.app",
         repo: "https://github.com/priyanshshahh/shiplog",
         tags: ["vibe-marketing", "hiring-showcase"],
-        shot: "/shots/priyanshshahh-keel.jpg",
       },
       {
         name: "Keel",
         oneLiner:
-          "PM platform built around shipping momentum, not points — Stand, Pulse, and a single highlighted next action instead of leaderboards.",
+          "PM platform built around shipping momentum, not points. Stand, Pulse, and a single highlighted next action instead of leaderboards.",
         url: "https://keel-pm.vercel.app",
         repo: "https://github.com/priyanshshahh/keel-pm",
         tags: ["productivity", "pm-tracking"],
@@ -97,7 +96,7 @@ export const builders: Builder[] = [
       {
         name: "Cohort Comms",
         oneLiner:
-          "Internal comms platform for the cohort — channels, SSE-live typing, and a webhook-driven activity feed.",
+          "Internal comms platform for the cohort. channels, SSE-live typing, and a webhook-driven activity feed.",
         url: "https://cohort-comms-phi.vercel.app",
         tags: ["internal-tools", "realtime-comms"],
         shot: "/shots/priyanshshahh-comms.jpg",
@@ -108,7 +107,7 @@ export const builders: Builder[] = [
     handle: "Studmuffin01",
     privacy: "public",
     buildRepo: "https://github.com/Studmuffin01",
-    bio: "Builder of Lighthouse — a hiring-partner-facing showcase with a live activity feed and PM status snapshot.",
+    bio: "Builder of Lighthouse. a hiring-partner-facing showcase with a live activity feed and PM status snapshot.",
     prUrl: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/193",
     projects: [
       {
@@ -125,7 +124,7 @@ export const builders: Builder[] = [
     handle: "kureen-cyber",
     privacy: "public",
     buildRepo: "https://github.com/kureen-cyber/Banterfolio",
-    bio: "Builder of Banterfolio — cohort dashboard with self-serve profiles, AI captions, and a social post scheduler.",
+    bio: "Builder of Banterfolio. cohort dashboard with self-serve profiles, AI captions, and a social post scheduler.",
     prUrl: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/191",
     projects: [
       {
@@ -143,13 +142,13 @@ export const builders: Builder[] = [
     handle: "mitchelldante99-create",
     name: "Dante Mitchell",
     privacy: "public",
-    bio: "Builder of Vibey — a self-serve cohort wall with hand-drawn visual identity and passcode-protected profiles.",
+    bio: "Builder of Vibey. a self-serve cohort wall with hand-drawn visual identity and passcode-protected profiles.",
     prUrl: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/190",
     projects: [
       {
         name: "Vibey",
         oneLiner:
-          "Self-serve cohort wall — participants add their own profile and projects, no admin bottleneck.",
+          "Self-serve cohort wall. participants add their own profile and projects, no admin bottleneck.",
         url: "https://vibey-three.vercel.app/",
         tags: ["community", "self-serve-wall"],
         shot: "/shots/mitchelldante99-vibey.jpg",
@@ -160,7 +159,7 @@ export const builders: Builder[] = [
     handle: "RamyaTolety",
     privacy: "public",
     buildRepo: "https://github.com/RamyaTolety/lighthouse-ramyatolety",
-    bio: "Builder of Lighthouse — a directory that parses the cohort repo's submissions/ directly from the GitHub API on every request.",
+    bio: "Builder of Lighthouse. a directory that parses the cohort repo's submissions/ directly from the GitHub API on every request.",
     prUrl: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/189",
     projects: [
       {
@@ -179,7 +178,7 @@ export const builders: Builder[] = [
     name: "Joseph Singh",
     privacy: "public",
     buildRepo: "https://github.com/joes9987/showcase-joes9987",
-    bio: "Builder of EudaMarket — a partner-facing showcase connected to a suite of cohort tools (EudaPM/EudaChat).",
+    bio: "Builder of EudaMarket. a partner-facing showcase connected to a suite of cohort tools (EudaPM/EudaChat).",
     prUrl: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/187",
     projects: [
       {
@@ -197,7 +196,7 @@ export const builders: Builder[] = [
     handle: "r3s0lv343vr",
     privacy: "public",
     buildRepo: "https://github.com/r3s0lv343vr/vibe-marketing-platform",
-    bio: "Builder of Pixie Dust Cheesecake — a brand-first showcase with a conversational AI Brand Designer studio.",
+    bio: "Builder of Pixie Dust Cheesecake. a brand-first showcase with a conversational AI Brand Designer studio.",
     prUrl: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/185",
     projects: [
       {
@@ -216,13 +215,13 @@ export const builders: Builder[] = [
     name: "Calvin V.",
     privacy: "public",
     buildRepo: "https://github.com/CodingWCal/cursor-boston-showcase",
-    bio: "Builder of the Cursor Boston × Hult showcase — an editorial marketing surface with full admin CRUD.",
+    bio: "Builder of the Cursor Boston × Hult showcase. an editorial marketing surface with full admin CRUD.",
     prUrl: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/184",
     projects: [
       {
         name: "Cursor Boston Showcase",
         oneLiner:
-          "Curated editorial marketing surface — project gallery, member directory, GitHub OAuth admin CRUD.",
+          "Curated editorial marketing surface. project gallery, member directory, GitHub OAuth admin CRUD.",
         url: "https://cursor-boston-showcase.vercel.app",
         repo: "https://github.com/CodingWCal/cursor-boston-showcase",
         tags: ["editorial", "admin-cms"],
@@ -234,7 +233,7 @@ export const builders: Builder[] = [
     handle: "RAVEN-dubgub",
     privacy: "public",
     buildRepo: "https://github.com/RAVEN-dubgub/showcase-raven-dubgub",
-    bio: 'Builder of a showcase positioned on one idea: "Don\'t trust our word — inspect their GitHub."',
+    bio: 'Builder of a showcase positioned on one idea: "Don\'t trust our word. inspect their GitHub."',
     prUrl: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/183",
     projects: [
       {
@@ -258,7 +257,7 @@ export const builders: Builder[] = [
     projects: [
       {
         name: "Private",
-        oneLiner: "Opted out of public marketing surface — still enrolled in Summer Pilot 2026.",
+        oneLiner: "Opted out of public marketing surface. still enrolled in Summer Pilot 2026.",
         url: "https://cohorts.algorithmacy.org/privacy",
         tags: ["privacy", "opt-out"],
       },

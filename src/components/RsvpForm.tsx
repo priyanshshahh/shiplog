@@ -62,10 +62,10 @@ export function RsvpForm() {
         disabled={status === "sending"}
         className="rounded-lg bg-accent px-5 py-3 font-term text-sm font-medium text-[#04140b] disabled:opacity-60"
       >
-        {status === "sending" ? "Sending…" : "RSVP to hiring showcase →"}
+        {status === "sending" ? "Sending…" : "Confirm RSVP"}
       </button>
       {status === "ok" && (
-        <p className="text-sm text-accent">You&apos;re on the list. Confirmation goes to placement.</p>
+        <p className="text-sm text-accent">Saved. Placement will follow up.</p>
       )}
       {status === "error" && <p className="text-sm text-amber">{error}</p>}
     </form>

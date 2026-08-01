@@ -1,6 +1,18 @@
 @import "tailwindcss";
 
 :root {
+  --background: #f4f6f4;
+  --foreground: #0c100e;
+  --muted: #5c665f;
+  --panel: #ffffff;
+  --border: #d5ddd6;
+  --accent: #0f9f56;
+  --accent-dim: #b8e6cb;
+  --amber: #b87a00;
+  --accent-ink: #04140b;
+}
+
+html.dark {
   --background: #08090a;
   --foreground: #e7ece7;
   --muted: #8a938c;
@@ -9,6 +21,7 @@
   --accent: #3ef08c;
   --accent-dim: #1f5c3d;
   --amber: #f0b83e;
+  --accent-ink: #04140b;
 }
 
 @theme inline {
@@ -29,32 +42,24 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
   background-image:
-    linear-gradient(rgba(62, 240, 140, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(62, 240, 140, 0.035) 1px, transparent 1px);
+    linear-gradient(color-mix(in oklab, var(--accent) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, var(--accent) 6%, transparent) 1px, transparent 1px);
   background-size: 42px 42px;
   background-position: center top;
 }
 
 ::selection {
   background: var(--accent);
-  color: #04140b;
+  color: var(--accent-ink);
 }
 
 .font-term {
   font-family: var(--font-mono), ui-monospace, monospace;
 }
 
-.text-glow {
-  text-shadow: 0 0 24px rgba(62, 240, 140, 0.35);
-}
-
 @keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
 
 .grain {
@@ -62,7 +67,7 @@ body {
   inset: 0;
   pointer-events: none;
   z-index: 40;
-  opacity: 0.04;
+  opacity: 0.03;
   mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }

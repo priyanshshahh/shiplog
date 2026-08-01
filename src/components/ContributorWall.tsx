@@ -16,8 +16,7 @@ export function ContributorWall({ limit = 24 }: { limit?: number }) {
             active contributors
           </h2>
           <p className="mt-2 max-w-xl text-sm text-muted">
-            {contributorCount} public contributors · {totalContributions} commits on the
-            cohort program repo — the same surface partners inspect.
+            {contributorCount} people · {totalContributions} commits on the cohort program repo.
           </p>
         </div>
         <a
@@ -26,7 +25,7 @@ export function ContributorWall({ limit = 24 }: { limit?: number }) {
           rel="noreferrer"
           className="font-term text-[11px] text-accent hover:underline"
         >
-          github contributors ↗
+          view on GitHub
         </a>
       </div>
       <div className="mt-6 flex flex-wrap gap-3">

@@ -1,63 +1,50 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { builders, cohortLabel, enrolledCount } from "@/data/roster";
 import { program } from "@/data/program";
 import { Reveal } from "@/components/Reveal";
-import { RequestIntroForm } from "@/components/RequestIntroForm";
+import { PartnersClient } from "@/components/PartnersClient";
 
 export const metadata: Metadata = {
-  title: "Partners — shiplog",
-  description:
-    "Hire, sponsor, or mentor Summer Pilot 2026 builders. Request intros to cohort@hult.edu.",
-  openGraph: {
-    title: "Partners — shiplog",
-    description: "Request intros to Summer Pilot 2026 builders.",
-    type: "website",
-  },
+  title: "Partners",
+  description: "Request intros to Summer Pilot 2026 builders.",
 };
 
-const engagements = [
-  {
-    title: "Hire",
-    body: "Every builder here has a merged pull request, peer review surface, and live production deploy. Skip the take-home — the take-home is already public.",
-  },
-  {
-    title: "Sponsor",
-    body: "Back a project or prize track for the next contest week. Sponsorship credits land on the partner page of the winning submission.",
-  },
-  {
-    title: "Mentor",
-    body: "Office hours, code review, or a note in a peer GitHub review issue — the same channel the cohort already uses.",
-  },
-];
+export default async function PartnersPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ with?: string }>;
+}) {
+  const sp = await searchParams;
+  const preselected = sp.with ? [sp.with] : [];
 
-export default function PartnersPage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
       <Reveal>
         <h1 className="font-term text-xs uppercase tracking-widest text-accent">for partners</h1>
         <p className="mt-3 text-3xl font-semibold leading-tight tracking-tight text-foreground">
-          {cohortLabel}: engineers shipping products, in the open, on a weekly clock.
+          {cohortLabel}: builders shipping live products every week.
         </p>
         <p className="mt-4 text-lg leading-relaxed text-muted">
-          {enrolledCount} participants complete tracked deliverables on GitHub — every submission
-          is a pull request, every review is a public GitHub issue, and every winner is decided by
-          peer <span className="text-foreground">Vote: up</span>, not a vendor scoreboard. Track
-          official progress on{" "}
-          <a
-            href={program.dashboard}
-            target="_blank"
-            rel="noreferrer"
-            className="text-accent hover:underline"
-          >
-            the cohort dashboard
-          </a>
-          .
+          {enrolledCount} enrolled. Pick who you want to meet. Intros go to{" "}
+          {program.placementEmail}.
         </p>
       </Reveal>
 
       <Reveal delay={0.05} className="mt-10 grid gap-4 sm:grid-cols-3">
-        {engagements.map((e) => (
+        {[
+          {
+            title: "Hire",
+            body: "Every profile links a merged PR and a live deploy you can use today.",
+          },
+          {
+            title: "Sponsor",
+            body: "Back a prize track or project for the next contest week.",
+          },
+          {
+            title: "Mentor",
+            body: "Office hours or a note in a public GitHub review issue.",
+          },
+        ].map((e) => (
           <div key={e.title} className="rounded-xl border border-border bg-panel/60 p-5">
             <h3 className="font-term text-sm text-accent">{e.title}</h3>
             <p className="mt-2 text-[13px] leading-relaxed text-muted">{e.body}</p>
@@ -65,40 +52,26 @@ export default function PartnersPage() {
         ))}
       </Reveal>
 
-      <Reveal delay={0.08} className="mt-12">
-        <h2 className="font-term text-xs uppercase tracking-widest text-accent">
-          fee model (summary)
-        </h2>
-        <p className="mt-3 text-sm leading-relaxed text-muted">
-          Placement follows the program hiring pipeline: showcase → async portfolio review → intro
-          requests via placement lead → your interview process → hire → referral fee on start date.
-          Details live in the cohort{" "}
-          <a
-            href="https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/blob/main/partnerships/hiring-partners.md"
-            target="_blank"
-            rel="noreferrer"
-            className="text-accent hover:underline"
-          >
-            hiring-partners.md
-          </a>
-          . Contact {program.placementEmail}.
-        </p>
-      </Reveal>
-
-      <Reveal delay={0.1} className="mt-12 rounded-2xl border border-border bg-panel/60 p-6 sm:p-8">
+      <Reveal delay={0.08} className="mt-12 rounded-2xl border border-border bg-panel/60 p-6 sm:p-8">
         <h2 className="text-xl font-semibold text-foreground">Request an intro</h2>
         <p className="mt-2 text-sm text-muted">
-          Routes to placement ({program.placementEmail}). Select the builders you want to meet.
+          Select one or more builders. Placement follows up from {program.placementEmail}.
         </p>
         <div className="mt-6">
-          <RequestIntroForm builders={builders} />
+          <PartnersClient builders={builders} preselected={preselected} />
         </div>
       </Reveal>
 
-      <Reveal delay={0.12} className="mt-10">
-        <Link href="/rsvp" className="font-term text-sm text-accent hover:underline">
-          Prefer the end-of-pilot showcase? RSVP here →
-        </Link>
+      <Reveal delay={0.1} className="mt-12 rounded-2xl border border-border bg-panel/40 p-6">
+        <h2 className="font-term text-xs uppercase tracking-widest text-accent">
+          hiring showcase event
+        </h2>
+        <p className="mt-2 text-sm text-muted">
+          End of pilot meetup for partners and builders. Leave your details if you want a seat.
+        </p>
+        <a href="/rsvp" className="mt-4 inline-block font-term text-sm text-accent hover:underline">
+          RSVP for the event
+        </a>
       </Reveal>
     </div>
   );

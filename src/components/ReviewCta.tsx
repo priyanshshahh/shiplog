@@ -19,7 +19,7 @@ export function ReviewCta() {
           <code className="font-term text-accent">Review by @you: @peer</code>.
         </li>
         <li>
-          Keep <code className="font-term text-accent">Vote: up</code> in the body to upvote — or
+          Keep <code className="font-term text-accent">Vote: up</code> in the body to upvote .  or
           delete that section to abstain. No downvotes. No on-site ballots.
         </li>
       </ol>

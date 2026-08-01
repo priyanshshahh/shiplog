@@ -36,7 +36,6 @@ export const contributors: Contributor[] = [
   { handle: "arjun-singh2127", contributions: 2 },
   { handle: "lvcasmadeit", contributions: 2 },
   { handle: "solzco1", contributions: 1 },
-  { handle: "Xavierhuang", contributions: 1 },
   { handle: "jj-javascript", contributions: 1 },
   { handle: "gge513", contributions: 1 },
   { handle: "celiciakitty-creator", contributions: 1 },

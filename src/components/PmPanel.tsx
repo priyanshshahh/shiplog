@@ -1,10 +1,9 @@
 import { pmSnapshot } from "@/data/pm";
 
-const statusColor: Record<string, string> = {
-  done: "text-accent",
-  "on-track": "text-accent",
-  "at-risk": "text-amber",
-  upcoming: "text-muted",
+const statusLabel: Record<string, string> = {
+  live: "live",
+  active: "this week",
+  upcoming: "upcoming",
 };
 
 export function PmPanel() {
@@ -13,11 +12,10 @@ export function PmPanel() {
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h2 className="font-term text-xs uppercase tracking-widest text-accent">
-            cohort pm pulse
+            cohort platforms
           </h2>
           <p className="mt-2 max-w-xl text-sm text-muted">
-            Read-only snapshot from the cohort PM platform — not hardcoded lorem.
-            Partners see real initiative status, the same data builders work against.
+            Shared surfaces the whole cohort uses. Open any link to inspect the live product.
           </p>
         </div>
         <a
@@ -26,7 +24,7 @@ export function PmPanel() {
           rel="noreferrer"
           className="font-term text-[11px] text-accent hover:underline"
         >
-          {pmSnapshot.sourceLabel} ↗
+          program overview
         </a>
       </div>
 
@@ -34,20 +32,22 @@ export function PmPanel() {
         {pmSnapshot.initiatives.map((i) => (
           <li key={i.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
             <div>
-              <p className="text-sm text-foreground">{i.title}</p>
-              <p className="mt-0.5 font-term text-[11px] text-muted">
-                @{i.ownerHandle} · {i.doneTasks} done · {i.openTasks} open
-              </p>
+              <a
+                href={i.url}
+                target="_blank"
+                rel="noreferrer"
+                className="text-sm text-foreground hover:text-accent"
+              >
+                {i.title}
+              </a>
+              <p className="mt-0.5 text-[13px] text-muted">{i.detail}</p>
             </div>
-            <span className={`font-term text-[11px] uppercase ${statusColor[i.status]}`}>
-              {i.status}
+            <span className="font-term text-[11px] uppercase text-accent">
+              {statusLabel[i.status]}
             </span>
           </li>
         ))}
       </ul>
-      <p className="mt-4 font-term text-[10px] text-muted/70">
-        synced {new Date(pmSnapshot.syncedAt).toLocaleString("en-US", { timeZone: "America/New_York" })} ET
-      </p>
     </section>
   );
 }
