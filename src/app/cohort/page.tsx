@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { builders, cohortLabel, enrolledCount } from "@/data/roster";
-import { BuilderCard } from "@/components/BuilderCard";
+import { CohortGrid } from "@/components/CohortGrid";
 import { Reveal } from "@/components/Reveal";
 
 export const metadata: Metadata = {
@@ -25,10 +25,8 @@ export default function CohortPage() {
         </p>
       </Reveal>
 
-      <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {builders.map((b, i) => (
-          <BuilderCard key={b.handle} builder={b} index={i} />
-        ))}
+      <div className="mt-10">
+        <CohortGrid builders={builders} />
       </div>
     </div>
   );

@@ -20,9 +20,38 @@ export type Builder = {
   projects: Project[];
 };
 
+export type ActivityEvent = {
+  handle: string;
+  project: string;
+  action: "merged" | "opened";
+  prNumber: number;
+  url: string;
+  at: string; // real ISO timestamp from `gh pr list --json mergedAt`
+};
+
+export function avatarUrl(handle: string) {
+  return `https://github.com/${handle}.png`;
+}
+
 export const cohortId = "summer26";
 export const cohortLabel = "Cohort 67";
 export const enrolledCount = 67;
+
+// Real merge/open events pulled via `gh pr list --repo rogerSuperBuilderAlpha/hult-cohort-program
+// --base projects/summer26/phase-1-project-3 --state all --json ... mergedAt`. Sorted newest first.
+export const activity: ActivityEvent[] = [
+  { handle: "priyanshshahh", project: "shiplog", action: "opened", prNumber: 197, url: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/197", at: "2026-08-01T07:16:31Z" },
+  { handle: "Studmuffin01", project: "Lighthouse", action: "merged", prNumber: 193, url: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/193", at: "2026-07-31T22:39:14Z" },
+  { handle: "kureen-cyber", project: "Banterfolio", action: "merged", prNumber: 191, url: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/191", at: "2026-07-31T21:07:17Z" },
+  { handle: "mitchelldante99-create", project: "Vibey", action: "merged", prNumber: 190, url: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/190", at: "2026-07-31T21:07:20Z" },
+  { handle: "RamyaTolety", project: "Lighthouse", action: "merged", prNumber: 189, url: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/189", at: "2026-07-31T21:07:23Z" },
+  { handle: "joes9987", project: "EudaMarket", action: "merged", prNumber: 187, url: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/187", at: "2026-07-31T21:07:27Z" },
+  { handle: "r3s0lv343vr", project: "Pixie Dust Cheesecake", action: "merged", prNumber: 185, url: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/185", at: "2026-07-31T21:07:31Z" },
+  { handle: "CodingWCal", project: "Cursor Boston Showcase", action: "merged", prNumber: 184, url: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/184", at: "2026-07-31T21:07:34Z" },
+  { handle: "RAVEN-dubgub", project: "Showcase", action: "merged", prNumber: 183, url: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/183", at: "2026-07-31T21:07:37Z" },
+  { handle: "priyanshshahh", project: "Cohort Comms", action: "merged", prNumber: 161, url: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/161", at: "2026-07-27T11:41:21Z" },
+  { handle: "priyanshshahh", project: "Keel", action: "merged", prNumber: 66, url: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/66", at: "2026-07-19T18:19:35Z" },
+];
 
 export const builders: Builder[] = [
   {

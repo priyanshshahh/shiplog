@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { builders } from "@/data/roster";
+import { avatarUrl, builders } from "@/data/roster";
 import { Tag } from "@/components/Tag";
 import { Reveal } from "@/components/Reveal";
 
@@ -43,11 +43,21 @@ export default async function BuilderPage({
       </Link>
 
       <Reveal className="mt-6">
-        <div className="flex flex-wrap items-center gap-3">
-          <h1 className="font-term text-2xl text-foreground">@{builder.handle}</h1>
-          {builder.isMe && (
-            <span className="font-term text-[11px] text-accent">that&apos;s me</span>
-          )}
+        <div className="flex flex-wrap items-center gap-4">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={avatarUrl(builder.handle)}
+            alt=""
+            width={64}
+            height={64}
+            className="h-16 w-16 rounded-full border border-border"
+          />
+          <div className="flex flex-wrap items-center gap-3">
+            <h1 className="font-term text-2xl text-foreground">@{builder.handle}</h1>
+            {builder.isMe && (
+              <span className="font-term text-[11px] text-accent">that&apos;s me</span>
+            )}
+          </div>
         </div>
         {builder.name && <p className="mt-1 text-muted">{builder.name}</p>}
         {builder.location && (

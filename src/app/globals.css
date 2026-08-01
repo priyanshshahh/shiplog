@@ -48,6 +48,15 @@ body {
   text-shadow: 0 0 24px rgba(62, 240, 140, 0.35);
 }
 
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 .grain {
   position: fixed;
   inset: 0;

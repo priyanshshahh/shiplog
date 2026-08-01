@@ -4,14 +4,19 @@ import { BuilderCard } from "@/components/BuilderCard";
 import { StatBar } from "@/components/StatBar";
 import { Reveal } from "@/components/Reveal";
 import { Hero } from "@/components/Hero";
+import { ActivityTicker } from "@/components/ActivityTicker";
 
 export default function Home() {
   const totalShips = builders.reduce((n, b) => n + b.projects.length, 0);
   const featured = builders.slice(0, 6);
 
   return (
-    <div className="mx-auto max-w-6xl px-6">
-      <Hero />
+    <div>
+      <div className="mx-auto max-w-6xl px-6">
+        <Hero />
+      </div>
+      <ActivityTicker />
+      <div className="mx-auto max-w-6xl px-6">
 
       <section className="pb-8">
         <StatBar
@@ -89,6 +94,7 @@ export default function Home() {
           </div>
         </Reveal>
       </section>
+      </div>
     </div>
   );
 }

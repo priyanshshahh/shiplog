@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import type { Builder } from "@/data/roster";
+import { avatarUrl, type Builder } from "@/data/roster";
 import { Tag } from "@/components/Tag";
 
 export function BuilderCard({ builder, index = 0 }: { builder: Builder; index?: number }) {
@@ -22,17 +22,28 @@ export function BuilderCard({ builder, index = 0 }: { builder: Builder; index?: 
       </div>
 
       <div className="relative flex items-start justify-between gap-3">
-        <div>
-          <Link
-            href={`/cohort/${builder.handle}`}
-            className="font-term text-sm text-foreground hover:text-accent"
-          >
-            @{builder.handle}
-          </Link>
-          {builder.isMe && (
-            <span className="ml-2 font-term text-[10px] text-accent">you</span>
-          )}
-          <p className="mt-1 text-sm font-medium text-foreground">{lead.name}</p>
+        <div className="flex items-center gap-3">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={avatarUrl(builder.handle)}
+            alt=""
+            width={36}
+            height={36}
+            className="h-9 w-9 rounded-full border border-border"
+            loading="lazy"
+          />
+          <div>
+            <Link
+              href={`/cohort/${builder.handle}`}
+              className="font-term text-sm text-foreground hover:text-accent"
+            >
+              @{builder.handle}
+            </Link>
+            {builder.isMe && (
+              <span className="ml-2 font-term text-[10px] text-accent">you</span>
+            )}
+            <p className="mt-0.5 text-sm font-medium text-foreground">{lead.name}</p>
+          </div>
         </div>
         <span className="font-term text-[10px] text-muted">
           {builder.projects.length > 1 ? `${builder.projects.length} ships` : "1 ship"}
