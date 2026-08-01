@@ -4,7 +4,7 @@ import { PmPanel } from "@/components/PmPanel";
 import { program } from "@/data/program";
 
 export const metadata: Metadata = {
-  title: "Platforms",
+  title: "Status",
   description: "Shared cohort platforms for Summer Pilot 2026.",
 };
 
@@ -13,7 +13,7 @@ export default function StatusPage() {
     <div className="mx-auto max-w-3xl px-6 py-16">
       <Reveal>
         <h1 className="font-term text-xs uppercase tracking-widest text-accent">
-          cohort platforms
+          status
         </h1>
         <p className="mt-3 max-w-2xl text-3xl font-semibold tracking-tight text-foreground">
           One place to open the tools the whole cohort shares.

@@ -5,9 +5,10 @@ import { usePathname } from "next/navigation";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 const links = [
-  { href: "/cohort", label: "roster" },
-  { href: "/status", label: "platforms" },
-  { href: "/partners", label: "partners" },
+  { href: "/#roster", label: "roster", match: "/" },
+  { href: "/cohort", label: "cohort", match: "/cohort" },
+  { href: "/status", label: "status", match: "/status" },
+  { href: "/partners", label: "partners", match: "/partners" },
 ];
 
 export function Nav() {
@@ -22,7 +23,10 @@ export function Nav() {
         </Link>
         <nav className="flex items-center gap-1 font-term text-sm">
           {links.map((l) => {
-            const active = pathname === l.href || pathname.startsWith(l.href + "/");
+            const active =
+              l.match === "/"
+                ? pathname === "/"
+                : pathname === l.match || pathname.startsWith(l.match + "/");
             return (
               <Link
                 key={l.href}
