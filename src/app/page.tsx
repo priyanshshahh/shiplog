@@ -1,65 +1,94 @@
-import Image from "next/image";
+import Link from "next/link";
+import { builders, cohortLabel, enrolledCount } from "@/data/roster";
+import { BuilderCard } from "@/components/BuilderCard";
+import { StatBar } from "@/components/StatBar";
+import { Reveal } from "@/components/Reveal";
+import { Hero } from "@/components/Hero";
 
 export default function Home() {
+  const totalShips = builders.reduce((n, b) => n + b.projects.length, 0);
+  const featured = builders.slice(0, 6);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <div className="mx-auto max-w-6xl px-6">
+      <Hero />
+
+      <section className="pb-8">
+        <StatBar
+          stats={[
+            { label: "enrolled", value: String(enrolledCount), hint: cohortLabel },
+            { label: "profiled here", value: String(builders.length), hint: "verified, PR-linked" },
+            { label: "live deploys", value: String(totalShips), hint: "not screenshots" },
+            { label: "review week", value: "GitHub-native", hint: "no on-site tallies" },
+          ]}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      </section>
+
+      <section id="recent-ships" className="py-16">
+        <Reveal className="flex items-end justify-between gap-4">
+          <div>
+            <h2 className="font-term text-xs uppercase tracking-widest text-accent">
+              recent ships
+            </h2>
+            <p className="mt-2 max-w-xl text-muted">
+              Every card links to a live deploy, a source repo, and the merged pull
+              request that proves it shipped. Nothing here is a mockup.
+            </p>
+          </div>
+          <Link
+            href="/cohort"
+            className="hidden shrink-0 font-term text-sm text-accent hover:underline sm:block"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            view full roster →
+          </Link>
+        </Reveal>
+
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {featured.map((b, i) => (
+            <BuilderCard key={b.handle} builder={b} index={i} />
+          ))}
         </div>
-      </main>
+
+        <Link
+          href="/cohort"
+          className="mt-6 block text-center font-term text-sm text-accent hover:underline sm:hidden"
+        >
+          view full roster →
+        </Link>
+      </section>
+
+      <section className="py-16">
+        <Reveal className="rounded-2xl border border-border bg-panel/60 p-8 sm:p-12">
+          <div className="grid gap-8 sm:grid-cols-[1.4fr_1fr] sm:items-center">
+            <div>
+              <h2 className="font-term text-xs uppercase tracking-widest text-accent">
+                for hiring partners
+              </h2>
+              <p className="mt-3 max-w-xl text-xl leading-snug text-foreground">
+                Every profile here is a merged pull request, a production URL, and a
+                person you can hire this week — not a portfolio someone meant to
+                finish.
+              </p>
+            </div>
+            <div className="flex flex-col gap-3 sm:items-end">
+              <Link
+                href="/partners"
+                className="w-full rounded-lg bg-accent px-5 py-3 text-center font-term text-sm font-medium text-[#04140b] transition-transform hover:scale-[1.02] sm:w-auto"
+              >
+                partner with the cohort →
+              </Link>
+              <a
+                href="https://github.com/rogerSuperBuilderAlpha/hult-cohort-program"
+                target="_blank"
+                rel="noreferrer"
+                className="w-full rounded-lg border border-border px-5 py-3 text-center font-term text-sm text-muted transition-colors hover:text-foreground sm:w-auto"
+              >
+                inspect the program repo ↗
+              </a>
+            </div>
+          </div>
+        </Reveal>
+      </section>
     </div>
   );
 }

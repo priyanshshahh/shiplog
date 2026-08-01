@@ -1,0 +1,84 @@
+"use client";
+
+import Link from "next/link";
+import { motion } from "framer-motion";
+import type { Builder } from "@/data/roster";
+import { Tag } from "@/components/Tag";
+
+export function BuilderCard({ builder, index = 0 }: { builder: Builder; index?: number }) {
+  const lead = builder.projects[0];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 14 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.4, delay: Math.min(index, 6) * 0.05 }}
+      whileHover={{ y: -4 }}
+      className="group relative overflow-hidden rounded-xl border border-border bg-panel/60 p-5 transition-colors hover:border-accent-dim"
+    >
+      <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+        <div className="absolute -top-24 -right-24 h-48 w-48 rounded-full bg-accent/10 blur-3xl" />
+      </div>
+
+      <div className="relative flex items-start justify-between gap-3">
+        <div>
+          <Link
+            href={`/cohort/${builder.handle}`}
+            className="font-term text-sm text-foreground hover:text-accent"
+          >
+            @{builder.handle}
+          </Link>
+          {builder.isMe && (
+            <span className="ml-2 font-term text-[10px] text-accent">you</span>
+          )}
+          <p className="mt-1 text-sm font-medium text-foreground">{lead.name}</p>
+        </div>
+        <span className="font-term text-[10px] text-muted">
+          {builder.projects.length > 1 ? `${builder.projects.length} ships` : "1 ship"}
+        </span>
+      </div>
+
+      <p className="relative mt-3 text-[13px] leading-relaxed text-muted">
+        {lead.oneLiner}
+      </p>
+
+      <div className="relative mt-4 flex flex-wrap gap-1.5">
+        <Tag>{lead.tags[0]}</Tag>
+        <Tag>{lead.tags[1]}</Tag>
+      </div>
+
+      <div className="relative mt-5 flex items-center gap-4 border-t border-border pt-3 font-term text-[11px] text-muted opacity-70 transition-opacity group-hover:opacity-100">
+        <a
+          href={lead.url}
+          target="_blank"
+          rel="noreferrer"
+          className="hover:text-accent"
+          onClick={(e) => e.stopPropagation()}
+        >
+          deploy ↗
+        </a>
+        {lead.repo && (
+          <a
+            href={lead.repo}
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-accent"
+            onClick={(e) => e.stopPropagation()}
+          >
+            repo ↗
+          </a>
+        )}
+        <a
+          href={builder.prUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="hover:text-accent"
+          onClick={(e) => e.stopPropagation()}
+        >
+          merged PR ↗
+        </a>
+      </div>
+    </motion.div>
+  );
+}
