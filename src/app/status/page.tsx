@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { myBuilder } from "@/data/roster";
+import { program } from "@/data/program";
 import { Reveal } from "@/components/Reveal";
+import { PmPanel } from "@/components/PmPanel";
 
 export const metadata: Metadata = {
   title: "Status — shiplog",
-  description: "Live links into this builder's earlier Summer Pilot 2026 deliverables.",
+  description: "PM pulse and prior Summer Pilot 2026 ships from @priyanshshahh.",
 };
 
 export default function StatusPage() {
@@ -12,17 +14,31 @@ export default function StatusPage() {
     <div className="mx-auto max-w-3xl px-6 py-16">
       <Reveal>
         <h1 className="font-term text-xs uppercase tracking-widest text-accent">
-          prior ships, this cohort
+          status · ecosystem
         </h1>
         <p className="mt-3 max-w-2xl text-3xl font-semibold tracking-tight text-foreground">
-          Weeks 1 and 2 didn&apos;t disappear when week 3 started.
+          Weeks 1–3 didn&apos;t disappear when the contest clock flipped.
         </p>
         <p className="mt-4 max-w-xl text-muted">
-          shiplog is the third merged pull request from{" "}
-          <span className="text-foreground">@{myBuilder.handle}</span> this pilot.
-          The first two are still live — click through and use them.
+          shiplog integrates read-only PM status (ballot requirement) and surfaces prior ships
+          from{" "}
+          <span className="text-foreground">@{myBuilder.handle}</span>. Official enrollment
+          progress:{" "}
+          <a
+            href={program.dashboard}
+            target="_blank"
+            rel="noreferrer"
+            className="text-accent hover:underline"
+          >
+            cohort dashboard
+          </a>
+          .
         </p>
       </Reveal>
+
+      <div className="mt-10">
+        <PmPanel />
+      </div>
 
       <div className="mt-10 space-y-5">
         {myBuilder.projects.map((p, i) => (
@@ -35,7 +51,7 @@ export default function StatusPage() {
             >
               <div className="flex items-center justify-between">
                 <span className="font-term text-sm text-accent">
-                  {i === 0 ? "week 1" : "week 2"} · {p.name}
+                  ship · {p.name}
                 </span>
                 <span className="font-term text-xs text-muted transition-colors group-hover:text-accent">
                   open live ↗
@@ -46,14 +62,6 @@ export default function StatusPage() {
             </a>
           </Reveal>
         ))}
-
-        <Reveal delay={0.15}>
-          <div className="rounded-xl border border-dashed border-border p-6 text-sm text-muted">
-            <span className="font-term text-accent">week 4+</span> — Ludwitt
-            learning app and phase 2 venture work are still ahead. This page
-            updates as those pull requests merge.
-          </div>
-        </Reveal>
       </div>
     </div>
   );

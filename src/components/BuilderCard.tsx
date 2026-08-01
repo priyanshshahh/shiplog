@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { avatarUrl, type Builder } from "@/data/roster";
 import { Tag } from "@/components/Tag";
+import { BrowserFrame } from "@/components/BrowserFrame";
 
 export function BuilderCard({ builder, index = 0 }: { builder: Builder; index?: number }) {
   const lead = builder.projects[0];
@@ -15,12 +16,22 @@ export function BuilderCard({ builder, index = 0 }: { builder: Builder; index?: 
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.4, delay: Math.min(index, 6) * 0.05 }}
       whileHover={{ y: -4 }}
-      className="group relative overflow-hidden rounded-xl border border-border bg-panel/60 p-5 transition-colors hover:border-accent-dim"
+      className="group relative overflow-hidden rounded-xl border border-border bg-panel/60 transition-colors hover:border-accent-dim"
     >
+      {lead.shot && (
+        <BrowserFrame
+          src={lead.shot}
+          alt={`${lead.name} screenshot`}
+          url={lead.url}
+          className="rounded-none border-0"
+        />
+      )}
+
       <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
         <div className="absolute -top-24 -right-24 h-48 w-48 rounded-full bg-accent/10 blur-3xl" />
       </div>
 
+      <div className="relative p-5">
       <div className="relative flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -89,6 +100,7 @@ export function BuilderCard({ builder, index = 0 }: { builder: Builder; index?: 
         >
           merged PR ↗
         </a>
+      </div>
       </div>
     </motion.div>
   );

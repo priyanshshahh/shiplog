@@ -5,16 +5,16 @@ import { usePathname } from "next/navigation";
 import { motion, useMotionTemplate, useScroll, useTransform } from "framer-motion";
 
 const links = [
+  { href: "/launch", label: "launches/" },
   { href: "/cohort", label: "cohort/" },
   { href: "/status", label: "status/" },
   { href: "/partners", label: "partners/" },
+  { href: "/rsvp", label: "rsvp/" },
 ];
 
 export function Nav() {
   const pathname = usePathname();
   const { scrollY } = useScroll();
-  // Liquid-glass nav: transparency, blur, and border all adapt to scroll depth
-  // instead of snapping between two fixed states.
   const bgAlpha = useTransform(scrollY, [0, 120], [0.35, 0.88]);
   const blur = useTransform(scrollY, [0, 120], [6, 16]);
   const borderAlpha = useTransform(scrollY, [0, 120], [0, 0.8]);
@@ -37,16 +37,16 @@ export function Nav() {
             transition={{ duration: 1, repeat: Infinity, times: [0, 0.5, 0.5, 1] }}
           />
         </Link>
-        <nav className="flex items-center gap-1 font-term text-sm">
+        <nav className="flex flex-wrap items-center justify-end gap-1 font-term text-sm">
           {links.map((l) => {
             const active = pathname === l.href || pathname.startsWith(l.href + "/");
             return (
               <Link
                 key={l.href}
                 href={l.href}
-                className={`rounded-md px-3 py-1.5 transition-colors ${
+                className={`rounded-md px-2.5 py-1.5 transition-colors sm:px-3 ${
                   active
-                    ? "text-accent bg-accent-dim/15"
+                    ? "bg-accent-dim/15 text-accent"
                     : "text-muted hover:text-foreground"
                 }`}
               >

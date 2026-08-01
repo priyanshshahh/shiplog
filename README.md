@@ -4,41 +4,52 @@
 
 shiplog is [@priyanshshahh](https://github.com/priyanshshahh)'s Week 3 ("Vibe marketing")
 submission to the [Hult Cohort Program](https://github.com/rogerSuperBuilderAlpha/hult-cohort-program),
-Summer Pilot 2026 (cohort id `summer26`). It's the public-facing showcase site for the cohort:
-participant profiles, real shipped projects, and a partner-facing narrative — every
-link on it points at a merged GitHub pull request and a live production deploy.
+Summer Pilot 2026 (cohort id `summer26`). It's the public-facing showcase / launchpad for the cohort:
+Debut-dense launch board, GitHub-native `Vote: up` review CTAs, partner intro + RSVP,
+PM pulse, and active contributors from the program repo.
 
 **Live:** https://shiplog-snowy.vercel.app
 
+**Official cohort ops:** https://cohorts.algorithmacy.org/dashboard
+
 ## For hiring partners
 
-Start at [`/partners`](https://shiplog-snowy.vercel.app/partners). Every builder
-profiled at [`/cohort`](https://shiplog-snowy.vercel.app/cohort) has a merged pull
-request you can read directly — this isn't self-reported metrics, it's the same
-repository the whole cohort ships against.
+Start at [`/partners`](https://shiplog-snowy.vercel.app/partners). Request intros route to
+`cohort@hult.edu`. RSVP for the end-of-pilot hiring showcase at
+[`/rsvp`](https://shiplog-snowy.vercel.app/rsvp). Every builder profiled at
+[`/cohort`](https://shiplog-snowy.vercel.app/cohort) links a merged pull request.
+
+**Why partner with us?**
+- **Proven execution:** live deploys, not repos alone
+- **Rapid iteration:** weekly merge clock + public GitHub peer review
+- **GitHub-native votes:** winners = most `Vote: up` in written review issues (no on-site ballots)
+
+## How peers upvote (contest winners)
+
+1. Open the peer's build repo (linked on each launch row / profile)
+2. File issue `Review by @you: @peer`
+3. Keep `### Vote: up` to upvote, or delete that section to abstain
+
+Tallies are **never shown on this site** (program rule). Track progress on the
+[official dashboard](https://cohorts.algorithmacy.org/dashboard).
 
 ## Why it looks the way it does
 
-The design leans into a terminal / GitHub-native aesthetic on purpose: this cohort's
-entire submission and review process runs through pull requests and issues, so the
-site's visual language (monospace labels, a single accent color, hover states that
-reveal the deploy/repo/PR links rather than hide them) is meant to reinforce
-"inspectable," not just "energetic."
+Terminal / GitHub-native aesthetic on purpose: liquid-glass nav, 3D page transitions,
+Debut-style launch board (sort / search / micro-tags), social pulse of merges + reviews,
+contributor wall from the program repo API. Inspired by Debut, OpenAI Showcase,
+BuildNatively, RapidNative — without inventing metrics.
 
 ## Data
 
-All roster data in [`src/data/roster.ts`](src/data/roster.ts) is sourced directly
-from merged PR bodies on `rogerSuperBuilderAlpha/hult-cohort-program` (PRs #66, #161,
-#183–193) — no placeholder names, fabricated metrics, or invented URLs. The roster
-currently profiles the 8 peers with merged Project 3 submissions plus the author;
-`enrolledCount` (67) comes from the program's own public
-[`/api/cohort/stats`](https://site-nine-rouge-68.vercel.app/api/cohort/stats)
-endpoint.
+- Roster: merged Project 3 PRs on `rogerSuperBuilderAlpha/hult-cohort-program`
+- Contributors: GitHub Contributors API (bots filtered)
+- Stats: `https://cohorts.algorithmacy.org/api/cohort/stats` → enrolledCount 67
+- PM pulse: read-only Keel snapshot (`src/data/pm.ts`)
 
 ## Stack
 
-Next.js 16 (App Router, Turbopack) · TypeScript · Tailwind CSS v4 · Framer Motion ·
-deployed on Vercel.
+Next.js 16 · TypeScript · Tailwind CSS v4 · Framer Motion · Vercel
 
 ## Local setup
 
@@ -49,19 +60,10 @@ npm install
 npm run dev   # http://localhost:3000
 ```
 
-No environment variables or backend credentials are required — all data is static
-and checked into `src/data/roster.ts`.
+Optional: `PLACEMENT_LEAD_EMAIL` overrides the default `cohort@hult.edu` for intro/RSVP logs.
 
 ## Known limitations
 
-- Roster only includes builders with a verified merged PR for this project week;
-  the rest of the cohort (67 enrolled total, per the program's own
-  `/api/cohort/stats`) isn't individually profiled yet.
-- No self-serve claim flow or auth — by design, to ship reliably inside the review
-  window rather than stand up new backend infrastructure under deadline.
-
-## Agent usage
-
-Built with Claude Code: researched the cohort repo (`AGENTS.md`, `content/program.ts`,
-governance docs) and all 8 competing Project 3 submissions via the GitHub API before
-writing any code, to ground every data point in a real, verifiable source.
+- Intro/RSVP notify via server log (+ placement email address) until SMTP provider is wired
+- Roster profiles builders with verified Project 3 PRs (+ privacy opt-out placeholder)
+- Vote tallies intentionally absent on-site — GitHub is the ballot

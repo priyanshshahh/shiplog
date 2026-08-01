@@ -10,15 +10,24 @@ export type Project = {
   url: string;
   repo?: string;
   tags: [string, string];
+  // Real screenshot captured live from `url` via Chrome DevTools, saved under
+  // public/shots/. Not a stock image or mockup.
+  shot?: string;
 };
 
+// Importers: BuilderCard, CohortGrid, LaunchBoard, profile pages, partners forms
+// User: "winner is by upvotes, and upvotes are received from review on github."
 export type Builder = {
   handle: string;
   name?: string;
   isMe?: boolean;
   bio: string;
   location?: string;
+  campus?: string;
   prUrl: string;
+  /** Build repo where peers file Review issues + optional Vote: up */
+  buildRepo?: string;
+  privacy?: "public" | "private";
   projects: Project[];
 };
 
@@ -62,8 +71,20 @@ export const builders: Builder[] = [
     isMe: true,
     bio: "Data scientist & blockchain developer — AI, NLP, and trading systems. Stony Brook AMS.",
     location: "New York, NY",
-    prUrl: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/66",
+    campus: "boston",
+    prUrl: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/197",
+    buildRepo: "https://github.com/priyanshshahh/shiplog",
+    privacy: "public",
     projects: [
+      {
+        name: "shiplog",
+        oneLiner:
+          "Official-grade vibe marketing launchpad — live ships, GitHub-native Vote: up, partner intros, and PM pulse for Summer Pilot 2026.",
+        url: "https://shiplog-snowy.vercel.app",
+        repo: "https://github.com/priyanshshahh/shiplog",
+        tags: ["vibe-marketing", "hiring-showcase"],
+        shot: "/shots/priyanshshahh-keel.jpg",
+      },
       {
         name: "Keel",
         oneLiner:
@@ -71,6 +92,7 @@ export const builders: Builder[] = [
         url: "https://keel-pm.vercel.app",
         repo: "https://github.com/priyanshshahh/keel-pm",
         tags: ["productivity", "pm-tracking"],
+        shot: "/shots/priyanshshahh-keel.jpg",
       },
       {
         name: "Cohort Comms",
@@ -78,11 +100,14 @@ export const builders: Builder[] = [
           "Internal comms platform for the cohort — channels, SSE-live typing, and a webhook-driven activity feed.",
         url: "https://cohort-comms-phi.vercel.app",
         tags: ["internal-tools", "realtime-comms"],
+        shot: "/shots/priyanshshahh-comms.jpg",
       },
     ],
   },
   {
     handle: "Studmuffin01",
+    privacy: "public",
+    buildRepo: "https://github.com/Studmuffin01",
     bio: "Builder of Lighthouse — a hiring-partner-facing showcase with a live activity feed and PM status snapshot.",
     prUrl: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/193",
     projects: [
@@ -92,11 +117,14 @@ export const builders: Builder[] = [
           "Hiring-partner homepage, project showcase, live activity feed, and developer profiles in a signal/night visual identity.",
         url: "https://lighthouse-studmuffin01.vercel.app",
         tags: ["partnerships", "hiring-showcase"],
+        shot: "/shots/studmuffin01-lighthouse.jpg",
       },
     ],
   },
   {
     handle: "kureen-cyber",
+    privacy: "public",
+    buildRepo: "https://github.com/kureen-cyber/Banterfolio",
     bio: "Builder of Banterfolio — cohort dashboard with self-serve profiles, AI captions, and a social post scheduler.",
     prUrl: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/191",
     projects: [
@@ -107,12 +135,14 @@ export const builders: Builder[] = [
         url: "https://banterfolio.vercel.app/",
         repo: "https://github.com/kureen-cyber/Banterfolio",
         tags: ["creator-tools", "social-scheduling"],
+        shot: "/shots/kureen-cyber-banterfolio.jpg",
       },
     ],
   },
   {
     handle: "mitchelldante99-create",
     name: "Dante Mitchell",
+    privacy: "public",
     bio: "Builder of Vibey — a self-serve cohort wall with hand-drawn visual identity and passcode-protected profiles.",
     prUrl: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/190",
     projects: [
@@ -122,11 +152,14 @@ export const builders: Builder[] = [
           "Self-serve cohort wall — participants add their own profile and projects, no admin bottleneck.",
         url: "https://vibey-three.vercel.app/",
         tags: ["community", "self-serve-wall"],
+        shot: "/shots/mitchelldante99-vibey.jpg",
       },
     ],
   },
   {
     handle: "RamyaTolety",
+    privacy: "public",
+    buildRepo: "https://github.com/RamyaTolety/lighthouse-ramyatolety",
     bio: "Builder of Lighthouse — a directory that parses the cohort repo's submissions/ directly from the GitHub API on every request.",
     prUrl: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/189",
     projects: [
@@ -137,12 +170,15 @@ export const builders: Builder[] = [
         url: "https://lighthouse-ramyatolety.vercel.app",
         repo: "https://github.com/RamyaTolety/lighthouse-ramyatolety",
         tags: ["infra", "auto-sync-directory"],
+        shot: "/shots/ramyatolety-lighthouse.jpg",
       },
     ],
   },
   {
     handle: "joes9987",
     name: "Joseph Singh",
+    privacy: "public",
+    buildRepo: "https://github.com/joes9987/showcase-joes9987",
     bio: "Builder of EudaMarket — a partner-facing showcase connected to a suite of cohort tools (EudaPM/EudaChat).",
     prUrl: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/187",
     projects: [
@@ -153,11 +189,14 @@ export const builders: Builder[] = [
         url: "https://showcase-joes9987.vercel.app",
         repo: "https://github.com/joes9987/showcase-joes9987",
         tags: ["partnerships", "suite-integration"],
+        shot: "/shots/joes9987-eudamarket.jpg",
       },
     ],
   },
   {
     handle: "r3s0lv343vr",
+    privacy: "public",
+    buildRepo: "https://github.com/r3s0lv343vr/vibe-marketing-platform",
     bio: "Builder of Pixie Dust Cheesecake — a brand-first showcase with a conversational AI Brand Designer studio.",
     prUrl: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/185",
     projects: [
@@ -168,12 +207,15 @@ export const builders: Builder[] = [
         url: "https://pixie-dust-cheesecake.vercel.app",
         repo: "https://github.com/r3s0lv343vr/vibe-marketing-platform",
         tags: ["branding", "ai-studio"],
+        shot: "/shots/r3s0lv343vr-pixiedust.jpg",
       },
     ],
   },
   {
     handle: "CodingWCal",
     name: "Calvin V.",
+    privacy: "public",
+    buildRepo: "https://github.com/CodingWCal/cursor-boston-showcase",
     bio: "Builder of the Cursor Boston × Hult showcase — an editorial marketing surface with full admin CRUD.",
     prUrl: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/184",
     projects: [
@@ -184,11 +226,14 @@ export const builders: Builder[] = [
         url: "https://cursor-boston-showcase.vercel.app",
         repo: "https://github.com/CodingWCal/cursor-boston-showcase",
         tags: ["editorial", "admin-cms"],
+        shot: "/shots/codingwcal-cursorboston.jpg",
       },
     ],
   },
   {
     handle: "RAVEN-dubgub",
+    privacy: "public",
+    buildRepo: "https://github.com/RAVEN-dubgub/showcase-raven-dubgub",
     bio: 'Builder of a showcase positioned on one idea: "Don\'t trust our word — inspect their GitHub."',
     prUrl: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program/pull/183",
     projects: [
@@ -199,6 +244,23 @@ export const builders: Builder[] = [
         url: "https://showcase-raven-dubgub.vercel.app",
         repo: "https://github.com/RAVEN-dubgub/showcase-raven-dubgub",
         tags: ["transparency", "live-status"],
+        shot: "/shots/raven-dubgub-showcase.jpg",
+      },
+    ],
+  },
+
+  {
+    handle: "opt-out-placeholder",
+    name: "Private builder",
+    privacy: "private",
+    bio: "This participant opted out of the public hiring showcase. Profile details are withheld.",
+    prUrl: "https://github.com/rogerSuperBuilderAlpha/hult-cohort-program",
+    projects: [
+      {
+        name: "Private",
+        oneLiner: "Opted out of public marketing surface — still enrolled in Summer Pilot 2026.",
+        url: "https://cohorts.algorithmacy.org/privacy",
+        tags: ["privacy", "opt-out"],
       },
     ],
   },

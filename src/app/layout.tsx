@@ -16,9 +16,26 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "shiplog — Summer Pilot 2026",
+  metadataBase: new URL("https://shiplog-snowy.vercel.app"),
+  title: {
+    default: "shiplog — Summer Pilot 2026",
+    template: "%s · shiplog",
+  },
   description:
-    "Proof of work, not a portfolio. Live deploys, real profiles, and merged pull requests from the Hult Cohort Program's Summer Pilot 2026.",
+    "Proof of work, not a portfolio. Live deploys, GitHub-native Vote: up, partner intros, and PM pulse for the Hult Cohort Program Summer Pilot 2026.",
+  openGraph: {
+    title: "shiplog — Summer Pilot 2026",
+    description:
+      "Vibe marketing launchpad for Summer Pilot 2026. Real ships. GitHub reviews. Partner intros.",
+    url: "https://shiplog-snowy.vercel.app",
+    siteName: "shiplog",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "shiplog — Summer Pilot 2026",
+    description: "Proof of work, not a portfolio.",
+  },
 };
 
 export default function RootLayout({
@@ -31,7 +48,7 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="flex min-h-full flex-col">
         <div className="grain" aria-hidden="true" />
         <Nav />
         <main className="flex-1">
