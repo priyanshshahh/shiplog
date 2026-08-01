@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { AuthButton } from "@/components/AuthButton";
 
 const links = [
   { href: "/#roster", label: "roster", match: "/" },
@@ -11,7 +12,7 @@ const links = [
   { href: "/partners", label: "partners", match: "/partners" },
 ];
 
-export function Nav() {
+export function Nav({ authEnabled }: { authEnabled: boolean }) {
   const pathname = usePathname();
 
   return (
@@ -41,6 +42,7 @@ export function Nav() {
               </Link>
             );
           })}
+          <AuthButton enabled={authEnabled} />
           <ThemeToggle />
         </nav>
       </div>

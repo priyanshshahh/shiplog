@@ -49,7 +49,7 @@ BuildNatively, RapidNative — without inventing metrics.
 
 ## Stack
 
-Next.js 16 · TypeScript · Tailwind CSS v4 · Framer Motion · Vercel
+Next.js 16 · TypeScript · Tailwind CSS v4 · Framer Motion · Auth.js (GitHub) · Neon Postgres · Vercel
 
 ## Local setup
 
@@ -60,6 +60,14 @@ npm install
 npm run dev   # http://localhost:3000
 ```
 
+Copy `.env.example` to `.env.local` and fill:
+
+- `DATABASE_URL` — Neon Postgres
+- `AUTH_SECRET`, `AUTH_GITHUB_ID`, `AUTH_GITHUB_SECRET` — Sign in with GitHub
+- Optional: `SYNC_SECRET`, `GITHUB_WEBHOOK_SECRET`, `BLOB_READ_WRITE_TOKEN`, `GITHUB_TOKEN`
+
+Then: `npm run db:push` and `POST /api/sync` (or hourly cron) to GO LIVE from merged cohort PRs.
+
 Optional: `PLACEMENT_LEAD_EMAIL` overrides the default `cohort@hult.edu` for intro/RSVP logs.
 
 ## Known limitations
@@ -67,3 +75,11 @@ Optional: `PLACEMENT_LEAD_EMAIL` overrides the default `cohort@hult.edu` for int
 - Intro/RSVP notify via server log (+ placement email address) until SMTP provider is wired
 - Roster profiles builders with verified Project 3 PRs (+ privacy opt-out placeholder)
 - Vote tallies intentionally absent on-site — GitHub is the ballot
+
+
+## Member ownership + GO LIVE
+
+- Static roster in `src/data/roster.ts` is the seed.
+- Merged PRs on `projects/summer26/phase-1-project-{1,2,3}` sync into Postgres (`/api/sync`, `/api/webhooks/github`).
+- Members sign in with GitHub at `/signin`, edit at `/me` (bio, privacy, taglines, tags, media order).
+- Comments/replies are on-site social only. Contest `Vote: up` stays on GitHub.

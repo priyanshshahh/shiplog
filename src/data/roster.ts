@@ -5,6 +5,7 @@
 // Source of truth: submissions/*.md + PR bodies on the cohort repo.
 
 export type Project = {
+  id?: string;
   name: string;
   oneLiner: string;
   url: string;
@@ -13,6 +14,10 @@ export type Project = {
   // Real screenshot captured live from `url` via Chrome DevTools, saved under
   // public/shots/. Not a stock image or mockup.
   shot?: string;
+  media?: string[];
+  fromMerge?: boolean;
+  phase?: string;
+  prUrl?: string;
 };
 
 // Importers: BuilderCard, CohortGrid, LaunchBoard, profile pages, partners forms
@@ -29,6 +34,9 @@ export type Builder = {
   buildRepo?: string;
   privacy?: "public" | "private";
   projects: Project[];
+  /** Optional override from member profile edit */
+  avatarOverride?: string;
+  claimed?: boolean;
 };
 
 export type ActivityEvent = {

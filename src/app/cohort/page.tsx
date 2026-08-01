@@ -1,14 +1,19 @@
 import type { Metadata } from "next";
-import { builders, cohortLabel, enrolledCount } from "@/data/roster";
+import { cohortLabel, enrolledCount } from "@/data/roster";
+import { getBuilders } from "@/lib/roster";
 import { CohortGrid } from "@/components/CohortGrid";
 import { Reveal } from "@/components/Reveal";
+import { GoLiveBanner } from "@/components/GoLiveBanner";
 
 export const metadata: Metadata = {
   title: "Roster",
   description: "Profiled builders in Summer Pilot 2026.",
 };
 
-export default function CohortPage() {
+export const dynamic = "force-dynamic";
+
+export default async function CohortPage() {
+  const builders = await getBuilders();
   const publicBuilders = builders.filter((b) => b.privacy !== "private");
 
   return (
@@ -21,8 +26,13 @@ export default function CohortPage() {
         </p>
         <p className="mt-3 max-w-2xl text-muted">
           Search or filter, open a profile, then request an intro to anyone you want to meet.
+          Ships GO LIVE when submission PRs merge.
         </p>
       </Reveal>
+
+      <div className="mt-8">
+        <GoLiveBanner />
+      </div>
 
       <div className="mt-10">
         <CohortGrid builders={publicBuilders} />

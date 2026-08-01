@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { program } from "@/data/program";
-import { builders } from "@/data/roster";
+import { getBuilders } from "@/lib/roster";
 
 type Body = {
   partnerName?: string;
@@ -45,6 +45,7 @@ export async function POST(request: Request) {
   if (studentHandles.length === 0) {
     return NextResponse.json({ error: "Select at least one builder." }, { status: 400 });
   }
+  const builders = await getBuilders();
   for (const handle of studentHandles) {
     const b = builders.find((x) => x.handle.toLowerCase() === handle.toLowerCase());
     if (!b || b.privacy === "private") {

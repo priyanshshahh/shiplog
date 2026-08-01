@@ -4,6 +4,8 @@ import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { PageTransition } from "@/components/PageTransition";
 import { ThemeScript } from "@/components/ThemeScript";
+import { Providers } from "@/components/Providers";
+import { hasAuthConfig } from "@/auth";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -43,6 +45,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const authEnabled = hasAuthConfig();
+
   return (
     <html
       lang="en"
@@ -53,12 +57,14 @@ export default function RootLayout({
         <ThemeScript />
       </head>
       <body className="flex min-h-full flex-col">
-        <div className="grain" aria-hidden="true" />
-        <Nav />
-        <main className="flex-1">
-          <PageTransition>{children}</PageTransition>
-        </main>
-        <Footer />
+        <Providers>
+          <div className="grain" aria-hidden="true" />
+          <Nav authEnabled={authEnabled} />
+          <main className="flex-1">
+            <PageTransition>{children}</PageTransition>
+          </main>
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

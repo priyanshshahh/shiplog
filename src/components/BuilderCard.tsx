@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { avatarUrl, type Builder } from "@/data/roster";
+import { type Builder } from "@/data/roster";
+import { resolveAvatar } from "@/lib/roster";
 import { Tag } from "@/components/Tag";
 import { BrowserFrame } from "@/components/BrowserFrame";
 
@@ -32,7 +33,7 @@ export function BuilderCard({ builder, index = 0 }: { builder: Builder; index?: 
           <div className="flex items-center gap-3">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={avatarUrl(builder.handle)}
+              src={resolveAvatar(builder)}
               alt=""
               width={36}
               height={36}

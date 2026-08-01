@@ -1,19 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { avatarUrl, builders } from "@/data/roster";
+import { builders as seedBuilders } from "@/data/roster";
+import { getBuilder, getBuilders, resolveAvatar } from "@/lib/roster";
 import { reviewIssueUrl, program } from "@/data/program";
 import { RequestIntroForm } from "@/components/RequestIntroForm";
 import { Tag } from "@/components/Tag";
 import { Reveal } from "@/components/Reveal";
 import { BrowserFrame } from "@/components/BrowserFrame";
+import { CommentThread } from "@/components/CommentThread";
+import { auth, hasAuthConfig } from "@/auth";
+
+export const dynamic = "force-dynamic";
 
 export function generateStaticParams() {
-  return builders.map((b) => ({ handle: b.handle }));
-}
-
-function findBuilder(handle: string) {
-  return builders.find((b) => b.handle.toLowerCase() === handle.toLowerCase());
+  return seedBuilders.map((b) => ({ handle: b.handle }));
 }
 
 export async function generateMetadata({
@@ -22,7 +23,7 @@ export async function generateMetadata({
   params: Promise<{ handle: string }>;
 }): Promise<Metadata> {
   const { handle } = await params;
-  const builder = findBuilder(handle);
+  const builder = await getBuilder(handle);
   if (!builder) return { title: "Not found" };
   return {
     title: `@${builder.handle}`,
@@ -36,8 +37,12 @@ export default async function BuilderPage({
   params: Promise<{ handle: string }>;
 }) {
   const { handle } = await params;
-  const builder = findBuilder(handle);
+  const builder = await getBuilder(handle);
   if (!builder) notFound();
+
+  const session = hasAuthConfig() ? await auth() : null;
+  const signedIn = session?.user?.login;
+  const allBuilders = await getBuilders();
 
   if (builder.privacy === "private") {
     return (
@@ -65,7 +70,7 @@ export default async function BuilderPage({
         <div className="flex flex-wrap items-center gap-4">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={avatarUrl(builder.handle)}
+            src={resolveAvatar(builder)}
             alt=""
             width={64}
             height={64}
@@ -77,18 +82,23 @@ export default async function BuilderPage({
             {builder.location && (
               <p className="mt-0.5 text-sm text-muted/70">{builder.location}</p>
             )}
+            {builder.claimed && (
+              <p className="mt-1 font-term text-xs text-accent">claimed profile</p>
+            )}
           </div>
         </div>
         <p className="mt-4 max-w-xl text-lg leading-relaxed text-foreground">{builder.bio}</p>
         <div className="mt-4 flex flex-wrap gap-4 font-term text-xs">
-          <a
-            href={builder.prUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="text-accent hover:underline"
-          >
-            merged PR
-          </a>
+          {builder.prUrl && (
+            <a
+              href={builder.prUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="text-accent hover:underline"
+            >
+              submission PR
+            </a>
+          )}
           <a
             href={`https://github.com/${builder.handle}`}
             target="_blank"
@@ -105,12 +115,17 @@ export default async function BuilderPage({
           >
             leave a review on GitHub
           </a>
+          {signedIn?.toLowerCase() === builder.handle.toLowerCase() && (
+            <Link href="/me" className="text-muted hover:text-accent">
+              edit
+            </Link>
+          )}
         </div>
       </Reveal>
 
       <div className="mt-12 space-y-6">
         {builder.projects.map((p, i) => (
-          <Reveal key={p.name} delay={i * 0.04}>
+          <Reveal key={p.id || p.name} delay={i * 0.04}>
             <div className="overflow-hidden rounded-xl border border-border bg-panel/60">
               {p.shot && (
                 <BrowserFrame
@@ -122,7 +137,12 @@ export default async function BuilderPage({
               )}
               <div className="p-6">
                 <div className="flex flex-wrap items-start justify-between gap-3">
-                  <h2 className="text-xl font-semibold text-foreground">{p.name}</h2>
+                  <div>
+                    <h2 className="text-xl font-semibold text-foreground">{p.name}</h2>
+                    {p.fromMerge && (
+                      <p className="mt-1 font-term text-xs text-accent">GO LIVE · from merge</p>
+                    )}
+                  </div>
                   <div className="flex gap-1.5">
                     <Tag>{p.tags[0]}</Tag>
                     <Tag>{p.tags[1]}</Tag>
@@ -138,12 +158,30 @@ export default async function BuilderPage({
                       source
                     </a>
                   )}
+                  {p.prUrl && (
+                    <a href={p.prUrl} target="_blank" rel="noreferrer" className="hover:text-accent">
+                      merged PR
+                    </a>
+                  )}
                 </div>
+                {p.id && (
+                  <CommentThread
+                    targetType="project"
+                    targetId={p.id}
+                    signedInHandle={signedIn}
+                  />
+                )}
               </div>
             </div>
           </Reveal>
         ))}
       </div>
+
+      <CommentThread
+        targetType="profile"
+        targetId={builder.handle}
+        signedInHandle={signedIn}
+      />
 
       <Reveal delay={0.15} className="mt-12 rounded-2xl border border-border bg-panel/60 p-6">
         <h2 className="font-term text-xs uppercase tracking-widest text-accent">
@@ -152,7 +190,7 @@ export default async function BuilderPage({
         <p className="mt-2 mb-4 text-sm text-muted">
           Partners: request an intro. Placement at {program.placementEmail} will follow up.
         </p>
-        <RequestIntroForm builders={builders} preselected={[builder.handle]} />
+        <RequestIntroForm builders={allBuilders} preselected={[builder.handle]} />
       </Reveal>
     </div>
   );

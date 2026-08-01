@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { builders, cohortLabel, enrolledCount } from "@/data/roster";
+import { cohortLabel, enrolledCount } from "@/data/roster";
+import { getBuilders } from "@/lib/roster";
 import { program } from "@/data/program";
 import { Reveal } from "@/components/Reveal";
 import { PartnersClient } from "@/components/PartnersClient";
@@ -9,6 +10,8 @@ export const metadata: Metadata = {
   description: "Request intros to Summer Pilot 2026 builders.",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function PartnersPage({
   searchParams,
 }: {
@@ -16,6 +19,7 @@ export default async function PartnersPage({
 }) {
   const sp = await searchParams;
   const preselected = sp.with ? [sp.with] : [];
+  const builders = (await getBuilders()).filter((b) => b.privacy !== "private");
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">

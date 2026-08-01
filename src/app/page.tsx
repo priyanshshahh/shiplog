@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { builders, cohortLabel, enrolledCount } from "@/data/roster";
+import { cohortLabel, enrolledCount } from "@/data/roster";
+import { getBuilders } from "@/lib/roster";
+import { GoLiveBanner } from "@/components/GoLiveBanner";
 import { StatBar } from "@/components/StatBar";
 import { Reveal } from "@/components/Reveal";
 import { Hero } from "@/components/Hero";
@@ -8,7 +10,10 @@ import { BuilderCard } from "@/components/BuilderCard";
 import { PmPanel } from "@/components/PmPanel";
 import { ContributorWall } from "@/components/ContributorWall";
 
-export default function Home() {
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  const builders = await getBuilders();
   const publicBuilders = builders.filter((b) => b.privacy !== "private");
   const featured = publicBuilders.slice(0, 6);
   const totalShips = builders.reduce((n, b) => n + b.projects.length, 0);
@@ -30,6 +35,8 @@ export default function Home() {
             ]}
           />
         </section>
+
+        <section className="py-6"><GoLiveBanner /></section>
 
         <section id="roster" className="py-16">
           <Reveal className="flex items-end justify-between gap-4">
