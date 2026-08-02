@@ -2,84 +2,152 @@
 
 **Proof of work, not a portfolio.**
 
-shiplog is [@priyanshshahh](https://github.com/priyanshshahh)'s Week 3 ("Vibe marketing")
-submission to the [Hult Cohort Program](https://github.com/rogerSuperBuilderAlpha/hult-cohort-program),
-Summer Pilot 2026 (cohort id `summer26`). It's the public-facing showcase / launchpad for the cohort:
-Debut-dense launch board, GitHub-native `Vote: up` review CTAs, partner intro + RSVP,
-PM pulse, and active contributors from the program repo.
+Public vibe marketing platform for the [Hult Cohort Developer Program](https://github.com/rogerSuperBuilderAlpha/hult-cohort-program) · Summer Pilot 2026 (`summer26`) · Week 3 submission by [@priyanshshahh](https://github.com/priyanshshahh).
 
-**Live:** https://shiplog-snowy.vercel.app
+| | |
+|---|---|
+| **Live** | https://shiplog-snowy.vercel.app |
+| **Build repo** | https://github.com/priyanshshahh/shiplog |
+| **Cohort ops** | https://cohorts.algorithmacy.org/dashboard |
+| **Placement** | cohort@hult.edu |
 
-**Official cohort ops:** https://cohorts.algorithmacy.org/dashboard
+---
 
-## For hiring partners
+## What to review (5 minutes)
 
-Start at [`/partners`](https://shiplog-snowy.vercel.app/partners). Request intros route to
-`cohort@hult.edu`. RSVP for the end-of-pilot hiring showcase at
-[`/rsvp`](https://shiplog-snowy.vercel.app/rsvp). Every builder profiled at
-[`/cohort`](https://shiplog-snowy.vercel.app/cohort) links a merged pull request.
+1. **Homepage** — https://shiplog-snowy.vercel.app — hero, stats, activity ticker, ship cards, PM pulse, contributors  
+2. **Roster** — https://shiplog-snowy.vercel.app/cohort — search / facet filters, open 2–3 profiles  
+3. **Sample profiles**
+   - https://shiplog-snowy.vercel.app/cohort/priyanshshahh  
+   - https://shiplog-snowy.vercel.app/cohort/RamyaTolety  
+   - https://shiplog-snowy.vercel.app/cohort/CodingWCal  
+4. **Partners** — https://shiplog-snowy.vercel.app/partners — request intro  
+5. **Status** — https://shiplog-snowy.vercel.app/status — PM snapshot  
+6. **RSVP** — https://shiplog-snowy.vercel.app/rsvp  
+7. **Claim / edit** — Sign in with GitHub → https://shiplog-snowy.vercel.app/me  
+8. **Ballot** — leave a GitHub review on this repo (optional `Vote: up`). Tallies are **not** shown on-site.
 
-**Why partner with us?**
-- **Proven execution:** live deploys, not repos alone
-- **Rapid iteration:** weekly merge clock + public GitHub peer review
-- **GitHub-native votes:** winners = most `Vote: up` in written review issues (no on-site ballots)
+---
 
-## How peers upvote (contest winners)
+## Features
 
-1. Open the peer's build repo (linked on each launch row / profile)
-2. File issue `Review by @you: @peer`
-3. Keep `### Vote: up` to upvote, or delete that section to abstain
+### Public marketing surface
+- Homepage narrative + enrolled/roster/deploy stats  
+- Live activity ticker (merge / open events from the cohort repo)  
+- Builder cards with optimized screenshots (next/image, AVIF/WebP)  
+- Full roster with search + facets (`all` / `showcase` / `tools` / `infra`)  
+- Per-builder profiles: bio, avatar, GitHub, ships, deploy / source / PR links  
+- Privacy opt-out (private profiles withheld)  
+- Contributor wall from the program repo  
+- Light / dark theme  
+- SEO + Open Graph metadata  
+- HTTPS on Vercel  
 
-Tallies are **never shown on this site** (program rule). Track progress on the
-[official dashboard](https://cohorts.algorithmacy.org/dashboard).
+### Member ownership (GitHub OAuth)
+- Sign in at `/signin` · identity = GitHub handle  
+- Edit profile at `/me`: name, bio, location, campus, privacy, build repo  
+- Edit ships: tagline, tags, media order, screenshots  
+- Add manual ships; merge-sourced deploy URLs stay locked as evidence  
+- Screenshot upload → resized WebP via sharp → Vercel Blob  
 
-## Why it looks the way it does
+### GO LIVE from merges
+- Merged PRs on `projects/summer26/phase-1-project-{1,2,3}` sync into Postgres  
+- Endpoints: `POST /api/sync` (cron + secret) · `POST /api/webhooks/github`  
+- Seed roster + weeks 1–3 ships appear on profiles automatically  
 
-Terminal / GitHub-native aesthetic on purpose: liquid-glass nav, 3D page transitions,
-Debut-style launch board (sort / search / micro-tags), social pulse of merges + reviews,
-contributor wall from the program repo API. Inspired by Debut, OpenAI Showcase,
-BuildNatively, RapidNative — without inventing metrics.
+### Social layer (not the contest ballot)
+- Comments + replies on profiles and projects  
+- Peer contest votes stay on GitHub (`Vote: up` in review issues only)  
 
-## Data
+### Partners / hiring
+- `/partners` — hire / sponsor / mentor narrative  
+- Request intro form → placement lead (`cohort@hult.edu`)  
+- Prefill via `?with=handle`  
+- `/rsvp` for end-of-pilot hiring showcase  
 
-- Roster: merged Project 3 PRs on `rogerSuperBuilderAlpha/hult-cohort-program`
-- Contributors: GitHub Contributors API (bots filtered)
-- Stats: `https://cohorts.algorithmacy.org/api/cohort/stats` → enrolledCount 67
-- PM pulse: read-only Keel snapshot (`src/data/pm.ts`)
+### Cohort ops
+- `/status` — read-only PM pulse (Keel snapshot)  
+- Nav: roster · cohort · status · partners · sign in  
+
+---
+
+## How peers vote (program rule)
+
+1. Open this build repo (or the peer’s linked build repo on their profile)  
+2. File issue: `Review by @you: @priyanshshahh`  
+3. Keep `### Vote: up` to upvote, or delete that section to abstain  
+
+No on-site tallies. Official progress: [dashboard](https://cohorts.algorithmacy.org/dashboard).
+
+---
 
 ## Stack
 
-Next.js 16 · TypeScript · Tailwind CSS v4 · Framer Motion · Auth.js (GitHub) · Neon Postgres · Vercel
+Next.js 16 (App Router) · TypeScript · Tailwind CSS v4 · Framer Motion · Auth.js (GitHub) · Neon Postgres (Drizzle) · Vercel Blob · Vercel
+
+---
 
 ## Local setup
 
 ```bash
 git clone https://github.com/priyanshshahh/shiplog.git
 cd shiplog
+cp .env.example .env.local   # fill DATABASE_URL + AUTH_* at minimum
 npm install
-npm run dev   # http://localhost:3000
+npm run db:push              # when DATABASE_URL is set
+npm run build
+npm run dev                  # http://localhost:3000
 ```
 
-Copy `.env.example` to `.env.local` and fill:
+### Environment
 
-- `DATABASE_URL` — Neon Postgres
-- `AUTH_SECRET`, `AUTH_GITHUB_ID`, `AUTH_GITHUB_SECRET` — Sign in with GitHub
-- Optional: `SYNC_SECRET`, `GITHUB_WEBHOOK_SECRET`, `BLOB_READ_WRITE_TOKEN`, `GITHUB_TOKEN`
+| Variable | Required | Purpose |
+|----------|----------|---------|
+| `DATABASE_URL` | for edits / sync / comments | Neon Postgres |
+| `AUTH_SECRET` | for sign-in | Auth.js secret |
+| `AUTH_GITHUB_ID` / `AUTH_GITHUB_SECRET` | for sign-in | GitHub OAuth App |
+| `AUTH_URL` | prod | e.g. `https://shiplog-snowy.vercel.app` |
+| `BLOB_READ_WRITE_TOKEN` | for screenshots | Vercel Blob |
+| `SYNC_SECRET` | recommended | Protect `/api/sync` |
+| `GITHUB_WEBHOOK_SECRET` | optional | Webhook HMAC |
+| `GITHUB_TOKEN` | optional | Higher GitHub API rate limits |
+| `PLACEMENT_LEAD_EMAIL` | optional | Override `cohort@hult.edu` |
 
-Then: `npm run db:push` and `POST /api/sync` (or hourly cron) to GO LIVE from merged cohort PRs.
+OAuth callback URL: `https://<host>/api/auth/callback/github`
 
-Optional: `PLACEMENT_LEAD_EMAIL` overrides the default `cohort@hult.edu` for intro/RSVP logs.
+After DB is up: `POST /api/sync` (with `Authorization: Bearer $SYNC_SECRET` if set) to import merged ships.
+
+---
+
+## Architecture notes
+
+- Static seed: `src/data/roster.ts` (hand-verified ships)  
+- Runtime overlay: Neon `members` / `projects` / `comments` / `sync_events`  
+- Merge sync: `src/lib/github-sync.ts`  
+- Public pages degrade to seed if `DATABASE_URL` is unset  
+
+---
 
 ## Known limitations
 
-- Intro/RSVP notify via server log (+ placement email address) until SMTP provider is wired
-- Roster profiles builders with verified Project 3 PRs (+ privacy opt-out placeholder)
-- Vote tallies intentionally absent on-site — GitHub is the ballot
+- Intro / RSVP are validated and logged server-side (placement email in payload); SMTP not wired yet  
+- GitHub avatar CDN cache TTL is outside our control  
+- Contest winners = most public `Vote: up` in review issues — never shown as on-site tallies  
+- `67` is **enrolledCount**, not a cohort name  
 
+---
 
-## Member ownership + GO LIVE
+## Routes
 
-- Static roster in `src/data/roster.ts` is the seed.
-- Merged PRs on `projects/summer26/phase-1-project-{1,2,3}` sync into Postgres (`/api/sync`, `/api/webhooks/github`).
-- Members sign in with GitHub at `/signin`, edit at `/me` (bio, privacy, taglines, tags, media order).
-- Comments/replies are on-site social only. Contest `Vote: up` stays on GitHub.
+| Path | Purpose |
+|------|---------|
+| `/` | Marketing home |
+| `/cohort` | Full roster |
+| `/cohort/[handle]` | Builder profile + comments |
+| `/me` | Edit profile / ships (auth) |
+| `/signin` | GitHub OAuth |
+| `/partners` | Partner pitch + intro form |
+| `/rsvp` | Hiring showcase RSVP |
+| `/status` | PM pulse |
+| `/api/sync` | Merge backfill |
+| `/api/webhooks/github` | Merge webhook |
